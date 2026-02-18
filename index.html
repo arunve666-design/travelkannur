@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Travel Kannur — God's Own Northern Shore</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Raleway:wght@300;400;600&family=Noto+Sans+Malayalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #F4650A;
+    --yellow: #F9C23C;
+    --deep: #1A0A00;
+    --cream: #FFF8EE;
+    --brown: #7A3B10;
+    --light-orange: #FFE0C2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Raleway', sans-serif;
+    background: var(--cream);
+    color: var(--deep);
+    overflow-x: hidden;
+  }
+
+  .malayalam {
+    font-family: 'Noto Sans Malayalam', sans-serif;
+    font-size: 0.85em;
+    color: var(--brown);
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 5%;
+    background: rgba(26,10,0,0.88);
+    backdrop-filter: blur(10px);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--yellow);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--orange); }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+
+  .nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--yellow); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #1A0A00 0%, #7A3B10 50%, #F4650A 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 5%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80') center/cover no-repeat;
+    opacity: 0.15;
+  }
+
+  .hero-badge {
+    background: var(--yellow);
+    color: var(--deep);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 30px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.8s ease both;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.05;
+    animation: fadeUp 0.8s 0.2s ease both;
+    position: relative;
+  }
+
+  .hero h1 span { color: var(--yellow); }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255,255,255,0.8);
+    margin-top: 16px;
+    font-weight: 300;
+    animation: fadeUp 0.8s 0.4s ease both;
+    position: relative;
+  }
+
+  .hero-malayalam {
+    font-family: 'Noto Sans Malayalam', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: var(--yellow);
+    margin-top: 8px;
+    animation: fadeUp 0.8s 0.5s ease both;
+    position: relative;
+  }
+
+  .hero-cta {
+    margin-top: 40px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 0.8s 0.6s ease both;
+    position: relative;
+  }
+
+  .btn-primary {
+    background: var(--orange);
+    color: #fff;
+    padding: 14px 36px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(244,101,10,0.5);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: #fff;
+    padding: 14px 36px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 2px solid rgba(255,255,255,0.5);
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-outline:hover { border-color: var(--yellow); color: var(--yellow); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+
+  .hero-scroll::after { content: '↓'; font-size: 1.2rem; color: var(--yellow); }
+
+  /* SECTIONS */
+  section { padding: 90px 5%; }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    color: var(--deep);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .section-desc {
+    font-size: 1.05rem;
+    color: #555;
+    max-width: 550px;
+    line-height: 1.8;
+    margin-bottom: 48px;
+  }
+
+  /* BEACHES */
+  #beaches { background: var(--cream); }
+
+  .beaches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .beach-card {
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    height: 380px;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+
+  .beach-card:hover { transform: translateY(-8px); }
+
+  .beach-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .beach-card:hover img { transform: scale(1.07); }
+
+  .beach-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,10,0,0.88) 0%, transparent 55%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 28px;
+  }
+
+  .beach-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .beach-card p { font-size: 0.85rem; color: rgba(255,255,255,0.75); margin-top: 6px; line-height: 1.5; }
+
+  .beach-tag {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--deep);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  /* FOOD */
+  #food { background: var(--deep); color: #fff; }
+  #food .section-title { color: #fff; }
+  #food .section-desc { color: rgba(255,255,255,0.65); }
+  #food .section-label { color: var(--yellow); }
+
+  .food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .food-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 28px 24px;
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .food-card:hover { background: rgba(244,101,10,0.2); transform: translateY(-5px); }
+
+  .food-icon { font-size: 2.5rem; margin-bottom: 16px; display: block; }
+
+  .food-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--yellow);
+    margin-bottom: 8px;
+  }
+
+  .food-card p { font-size: 0.88rem; color: rgba(255,255,255,0.65); line-height: 1.7; }
+
+  /* SPORTS */
+  #sports { background: linear-gradient(135deg, #FFF8EE 0%, #FFE0C2 100%); }
+
+  .sports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+
+  .sport-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 36px 28px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(122,59,16,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .sport-card:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(244,101,10,0.2); }
+
+  .sport-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
+
+  .sport-card h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--deep); margin-bottom: 10px; }
+
+  .sport-card p { font-size: 0.88rem; color: #666; line-height: 1.7; }
+
+  /* CONTACT */
+  #contact { background: var(--orange); }
+  #contact .section-label { color: var(--yellow); }
+  #contact .section-title { color: #fff; }
+  #contact .section-desc { color: rgba(255,255,255,0.85); }
+
+  .contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .contact-info h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #fff; margin-bottom: 6px; }
+  .contact-info p { color: rgba(255,255,255,0.8); font-size: 0.95rem; line-height: 1.8; margin-bottom: 24px; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+
+  .contact-form input,
+  .contact-form textarea {
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: #fff;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .contact-form input::placeholder,
+  .contact-form textarea::placeholder { color: rgba(255,255,255,0.6); }
+
+  .contact-form input:focus,
+  .contact-form textarea:focus { border-color: var(--yellow); }
+
+  .contact-form textarea { min-height: 130px; resize: vertical; }
+
+  .btn-white {
+    background: #fff;
+    color: var(--orange);
+    padding: 14px 36px;
+    border-radius: 50px;
+    border: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    align-self: flex-start;
+    letter-spacing: 1px;
+  }
+
+  .btn-white:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+
+  /* FOOTER */
+  footer {
+    background: var(--deep);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 32px 5%;
+    font-size: 0.85rem;
+  }
+
+  footer span { color: var(--yellow); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .contact-wrapper { grid-template-columns: 1fr; gap: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Travel<span>Kannur</span></a>
+  <ul class="nav-links">
+    <li><a href="#beaches">Beaches</a></li>
+    <li><a href="#food">Food</a></li>
+    <li><a href="#sports">Activities</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">Kerala's Northern Gem</div>
+  <h1>Welcome to<br><span>Kannur</span></h1>
+  <p class="hero-sub">Where ancient traditions meet golden shores</p>
+  <p class="hero-malayalam">കണ്ണൂരിലേക്ക് സ്വാഗതം</p>
+  <div class="hero-cta">
+    <a href="#beaches" class="btn-primary">Explore Now</a>
+    <a href="#contact" class="btn-outline">Plan Your Trip</a>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<section id="beaches">
+  <p class="section-label reveal">Sun & Sand</p>
+  <h2 class="section-title reveal">Beautiful Beaches
+    <span class="malayalam">മനോഹരമായ കടൽത്തീരങ്ങൾ</span>
+  </h2>
+  <p class="section-desc reveal">Kannur's coastline stretches for miles with pristine, uncrowded beaches that take your breath away.</p>
+
+  <div class="beaches-grid">
+    <div class="beach-card reveal">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80" alt="Payyambalam Beach">
+      <div class="beach-card-overlay">
+        <span class="beach-tag">Most Popular</span>
+        <h3>Payyambalam Beach</h3>
+        <p>A serene city beach perfect for evening walks and stunning sunsets.</p>
+        <span class="malayalam" style="color:rgba(255,255,255,0.6)">പയ്യാമ്പലം ബീച്ച്</span>
+      </div>
+    </div>
+    <div class="beach-card reveal">
+      <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&q=80" alt="Muzhappilangad Beach">
+      <div class="beach-card-overlay">
+        <span class="beach-tag">Drive-In Beach</span>
+        <h3>Muzhappilangad Beach</h3>
+        <p>Asia's longest drive-in beach — 4km of hard sand where you can drive your car!</p>
+        <span class="malayalam" style="color:rgba(255,255,255,0.6)">മുഴപ്പിലങ്ങാട് ബീച്ച്</span>
+      </div>
+    </div>
+    <div class="beach-card reveal">
+      <img src="https://images.unsplash.com/photo-1473186505569-9c61870c11f9?w=600&q=80" alt="Meenkunnu Beach">
+      <div class="beach-card-overlay">
+        <span class="beach-tag">Hidden Gem</span>
+        <h3>Meenkunnu Beach</h3>
+        <p>A quiet, unspoilt beach surrounded by coconut groves — perfect for peaceful getaways.</p>
+        <span class="malayalam" style="color:rgba(255,255,255,0.6)">മീൻകുന്ന് ബീച്ച്</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="food">
+  <p class="section-label reveal">Local Flavours</p>
+  <h2 class="section-title reveal">Must-Try Foods
+    <span class="malayalam" style="color:rgba(255,255,255,0.45)">രുചിക്കൂട്ടുകൾ</span>
+  </h2>
+  <p class="section-desc reveal">Kannur's cuisine is a rich blend of Malabar spices, seafood, and age-old recipes passed down through generations.</p>
+
+  <div class="food-grid">
+    <div class="food-card reveal">
+      <span class="food-icon">🦪</span>
+      <h3>Kallummakkaya</h3>
+      <p>Spicy mussel fry — Kannur's most iconic seafood dish, cooked with coconut and Malabar spices.</p>
+      <span class="malayalam" style="color:rgba(255,255,255,0.4)">കല്ലുമ്മക്കായ</span>
+    </div>
+    <div class="food-card reveal">
+      <span class="food-icon">🫓</span>
+      <h3>Pathiri</h3>
+      <p>Soft rice flour flatbreads, best enjoyed with spicy chicken or mutton curry — a Malabar classic.</p>
+      <span class="malayalam" style="color:rgba(255,255,255,0.4)">പത്തിരി</span>
+    </div>
+    <div class="food-card reveal">
+      <span class="food-icon">🍛</span>
+      <h3>Malabar Biryani</h3>
+      <p>Fragrant biryani made with jeerakasala rice — unlike any biryani you've tasted before.</p>
+      <span class="malayalam" style="color:rgba(255,255,255,0.4)">മലബാർ ബിരിയാണി</span>
+    </div>
+    <div class="food-card reveal">
+      <span class="food-icon">🍮</span>
+      <h3>Unnakkai</h3>
+      <p>Deep fried banana dumplings stuffed with sweet coconut filling — a delightful local snack.</p>
+      <span class="malayalam" style="color:rgba(255,255,255,0.4)">ഉന്നക്കായ</span>
+    </div>
+  </div>
+</section>
+
+<section id="sports">
+  <p class="section-label reveal">Adventure Awaits</p>
+  <h2 class="section-title reveal">Sports & Activities
+    <span class="malayalam">കായിക വിനോദങ്ങൾ</span>
+  </h2>
+  <p class="section-desc reveal">From thrilling water sports to Kannur's rich cultural performances, there's something exciting for everyone.</p>
+
+  <div class="sports-grid">
+    <div class="sport-card reveal">
+      <span class="sport-icon">🏄</span>
+      <h3>Water Sports</h3>
+      <p>Enjoy surfing, jet skiing, and banana boat rides along Kannur's warm Arabian Sea coast.</p>
+      <span class="malayalam">ജലക്രീഡകൾ</span>
+    </div>
+    <div class="sport-card reveal">
+      <span class="sport-icon">🚗</span>
+      <h3>Drive-In Beach</h3>
+      <p>Drive your car along Asia's longest drive-in beach at Muzhappilangad — a truly unique experience.</p>
+      <span class="malayalam">ഡ്രൈവ്-ഇൻ ബീച്ച്</span>
+    </div>
+    <div class="sport-card reveal">
+      <span class="sport-icon">🎭</span>
+      <h3>Theyyam</h3>
+      <p>Witness the ancient ritual art of Theyyam — a spectacular performance of dance, music and colour.</p>
+      <span class="malayalam">തെയ്യം</span>
+    </div>
+    <div class="sport-card reveal">
+      <span class="sport-icon">🚵</span>
+      <h3>Trekking</h3>
+      <p>Explore lush green hills and spice plantations on guided treks through Kannur's countryside.</p>
+      <span class="malayalam">ട്രക്കിങ്</span>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <p class="section-label reveal">Get In Touch</p>
+  <h2 class="section-title reveal">Plan Your Trip
+    <span class="malayalam" style="color:rgba(255,255,255,0.7)">നിങ്ങളുടെ യാത്ര ആസൂത്രണം ചെയ്യൂ</span>
+  </h2>
+  <p class="section-desc reveal">Have questions about visiting Kannur? We'd love to help you plan an unforgettable trip.</p>
+
+  <div class="contact-wrapper">
+    <div class="contact-info reveal">
+      <h4>📍 Location</h4>
+      <p>Kannur, Kerala, India — 670001</p>
+      <h4>📧 Email</h4>
+      <p>hello@travelkannur.in</p>
+      <h4>📱 Phone</h4>
+      <p>+91 98765 43210</p>
+      <h4>🕐 Best Time to Visit</h4>
+      <p>October to March — cool weather, clear skies, and calm seas perfect for beach activities.</p>
+      <span class="malayalam">ഒക്ടോബർ മുതൽ മാർച്ച് വരെ സന്ദർശിക്കാൻ ഏറ്റവും നല്ല സമയം</span>
+    </div>
+
+    <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+      <input type="text" placeholder="Your Name / നിങ്ങളുടെ പേര്" required>
+      <input type="email" placeholder="Email Address" required>
+      <input type="text" placeholder="Where are you travelling from?">
+      <textarea placeholder="Tell us about your trip plans... / യാത്ര പദ്ധതികൾ പറയൂ..."></textarea>
+      <button type="submit" class="btn-white">Send Message ✈️</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 <span>TravelKannur.in</span> — Made with ❤️ for the land of looms and lores</p>
+  <p style="margin-top:8px;font-family:'Noto Sans Malayalam',sans-serif;font-size:0.9rem;">കണ്ണൂർ — നെയ്ത്തിന്റെയും കലയുടെയും നാട്</p>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button');
+    btn.textContent = '✅ Message Sent!';
+    btn.style.background = '#F9C23C';
+    setTimeout(() => {
+      btn.textContent = 'Send Message ✈️';
+      btn.style.background = '#fff';
+      e.target.reset();
+    }, 3000);
+  }
+</script>
+</body>
+</html>
