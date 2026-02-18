@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Best Beach to Visit Today in Kannur | Travel Kannur</title>
+<meta name="description" content="Find out which beach in Kannur is best to visit today. Live weather, tide times and sea conditions for all Kannur beaches — updated daily.">
+<meta name="keywords" content="Kannur beach today, best beach Kannur, Kannur weather beach, tide times Kannur, sea conditions Kannur beaches">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Raleway:wght@300;400;600&family=Noto+Sans+Malayalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--orange:#F4650A;--yellow:#F9C23C;--deep:#1A0A00;--cream:#FFF8EE;--brown:#7A3B10;--blue:#0066CC;--teal:#008B8B;}
+  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+  body{font-family:'Raleway',sans-serif;background:#0a1628;color:#fff;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 5%;background:rgba(10,22,40,0.95);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,0.08);}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--yellow);text-decoration:none;}
+  .nav-logo span{color:var(--orange);}
+  .nav-links{display:flex;gap:24px;list-style:none;}
+  .nav-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.8rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:color 0.3s;}
+  .nav-links a:hover{color:var(--yellow);}
+
+  /* HERO */
+  .hero{min-height:60vh;background:linear-gradient(180deg,#0a1628 0%,#0d2845 50%,#0a1628 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 5% 60px;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,rgba(0,102,204,0.2) 0%,transparent 70%);}
+  .live-badge{background:rgba(255,69,0,0.2);border:1px solid rgba(255,69,0,0.4);color:#FF6B35;font-size:0.7rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:6px 18px;border-radius:30px;margin-bottom:20px;display:inline-flex;align-items:center;gap:8px;}
+  .live-dot{width:8px;height:8px;background:#FF4500;border-radius:50%;animation:pulse 1.5s infinite;}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:900;color:#fff;line-height:1.1;}
+  .hero h1 span{color:var(--yellow);}
+  .hero p{color:rgba(255,255,255,0.65);font-size:1.05rem;margin-top:16px;max-width:550px;line-height:1.7;}
+  .hero-ml{font-family:'Noto Sans Malayalam',sans-serif;color:var(--yellow);font-size:1rem;margin-top:8px;}
+
+  /* WEATHER WIDGET */
+  .weather-section{max-width:1100px;margin:0 auto;padding:60px 5%;}
+  .current-weather{background:linear-gradient(135deg,rgba(0,102,204,0.2),rgba(0,139,139,0.15));border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:40px;margin-bottom:40px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;align-items:center;}
+  .weather-main{text-align:center;}
+  .weather-icon-big{font-size:5rem;display:block;margin-bottom:12px;}
+  .weather-temp{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;color:var(--yellow);}
+  .weather-desc{font-size:1.1rem;color:rgba(255,255,255,0.7);margin-top:4px;}
+  .weather-date{font-size:0.8rem;color:rgba(255,255,255,0.4);margin-top:6px;letter-spacing:1px;}
+  .weather-details{display:flex;flex-direction:column;gap:16px;}
+  .weather-detail{display:flex;align-items:center;gap:12px;font-size:0.95rem;color:rgba(255,255,255,0.75);}
+  .weather-detail span:first-child{font-size:1.3rem;}
+  .sea-conditions{background:rgba(255,255,255,0.05);border-radius:16px;padding:24px;}
+  .sea-conditions h3{font-family:'Playfair Display',serif;color:var(--yellow);margin-bottom:16px;font-size:1.1rem;}
+  .sea-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:0.9rem;}
+  .sea-item:last-child{border-bottom:none;}
+  .sea-label{color:rgba(255,255,255,0.5);}
+  .sea-value{color:#fff;font-weight:600;}
+  .good{color:#4CAF50;}
+  .moderate{color:#FF9800;}
+  .rough{color:#F44336;}
+
+  /* BEACH RECOMMENDATION */
+  .rec-section{max-width:1100px;margin:0 auto;padding:0 5% 60px;}
+  .rec-title{font-family:'Playfair Display',serif;font-size:2rem;color:#fff;margin-bottom:8px;}
+  .rec-subtitle{color:rgba(255,255,255,0.5);margin-bottom:32px;font-size:0.95rem;}
+
+  .beach-rec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+  .beach-rec-card{border-radius:20px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);transition:transform 0.3s,border-color 0.3s;}
+  .beach-rec-card:hover{transform:translateY(-6px);border-color:rgba(255,215,0,0.3);}
+  .beach-rec-card.top-pick{border-color:rgba(76,175,80,0.4);background:rgba(76,175,80,0.05);}
+  .beach-rec-img{width:100%;height:180px;object-fit:cover;}
+  .beach-rec-body{padding:20px;}
+  .beach-rec-badge{font-size:0.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:20px;display:inline-block;margin-bottom:10px;}
+  .badge-best{background:rgba(76,175,80,0.2);color:#4CAF50;border:1px solid rgba(76,175,80,0.3);}
+  .badge-good{background:rgba(255,152,0,0.2);color:#FF9800;border:1px solid rgba(255,152,0,0.3);}
+  .badge-avoid{background:rgba(244,67,54,0.15);color:#EF9A9A;border:1px solid rgba(244,67,54,0.2);}
+  .beach-rec-name{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:8px;}
+  .beach-rec-reason{font-size:0.88rem;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:12px;}
+  .beach-conditions{display:flex;gap:8px;flex-wrap:wrap;}
+  .condition-pill{font-size:0.72rem;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);}
+
+  /* TIDE TABLE */
+  .tide-section{max-width:1100px;margin:0 auto;padding:0 5% 60px;}
+  .tide-title{font-family:'Playfair Display',serif;font-size:2rem;color:#fff;margin-bottom:8px;}
+  .tide-subtitle{color:rgba(255,255,255,0.5);margin-bottom:32px;}
+  .tide-table{width:100%;border-collapse:collapse;}
+  .tide-table th{font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);padding:12px 16px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.08);}
+  .tide-table td{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.95rem;}
+  .tide-table tr:hover td{background:rgba(255,255,255,0.03);}
+  .high-tide{color:#FF9800;font-weight:600;}
+  .low-tide{color:#4CAF50;font-weight:600;}
+
+  /* MONTHLY GUIDE */
+  .monthly-section{max-width:1100px;margin:0 auto;padding:0 5% 80px;}
+  .monthly-title{font-family:'Playfair Display',serif;font-size:2rem;color:#fff;margin-bottom:8px;}
+  .monthly-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:28px;}
+  .month-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;text-align:center;transition:all 0.3s;}
+  .month-card.best-month{border-color:rgba(76,175,80,0.4);background:rgba(76,175,80,0.06);}
+  .month-card.avoid-month{border-color:rgba(244,67,54,0.2);background:rgba(244,67,54,0.04);}
+  .month-name{font-family:'Playfair Display',serif;font-size:1rem;color:#fff;margin-bottom:8px;}
+  .month-rating{font-size:1.4rem;margin-bottom:6px;}
+  .month-desc{font-size:0.78rem;color:rgba(255,255,255,0.5);line-height:1.5;}
+
+  /* BOOKING */
+  .booking-bar{background:linear-gradient(135deg,#0066CC,#008B8B);margin:0 5%;border-radius:20px;padding:36px 48px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;max-width:1100px;margin-left:auto;margin-right:auto;margin-bottom:60px;}
+  .booking-bar h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;margin-bottom:6px;}
+  .booking-bar p{color:rgba(255,255,255,0.75);font-size:0.9rem;}
+  .btn-book{display:inline-block;padding:12px 24px;border-radius:50px;text-decoration:none;font-weight:700;font-size:0.88rem;transition:transform 0.2s;}
+  .btn-book:hover{transform:translateY(-3px);}
+  .btn-white{background:#fff;color:#0066CC;}
+  .btn-outline-w{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.5);margin-left:12px;}
+
+  footer{background:#050a14;color:rgba(255,255,255,0.3);text-align:center;padding:32px 5%;font-size:0.85rem;border-top:1px solid rgba(255,255,255,0.05);}
+  footer span{color:var(--yellow);}
+
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.6;transform:scale(1.3);}}
+  @media(max-width:768px){.nav-links{display:none;}.current-weather{grid-template-columns:1fr;}.booking-bar{flex-direction:column;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Travel<span>Kannur</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="beaches.html">All Beaches</a></li>
+    <li><a href="theyyam.html">Theyyam</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="live-badge"><span class="live-dot"></span> Updated Daily</div>
+  <h1>Best Beach to Visit<br><span>in Kannur Today</span></h1>
+  <p>We check the weather, sea conditions and tide times every day to tell you exactly which Kannur beach is best to visit right now.</p>
+  <p class="hero-ml">ഇന്ന് ഏത് ബീച്ചിൽ പോകണം?</p>
+</section>
+
+<div class="weather-section">
+  <div class="current-weather" id="weatherWidget">
+    <div class="weather-main">
+      <span class="weather-icon-big" id="weatherIcon">⛅</span>
+      <div class="weather-temp" id="weatherTemp">31°C</div>
+      <div class="weather-desc" id="weatherDesc">Partly Cloudy</div>
+      <div class="weather-date" id="weatherDate"></div>
+    </div>
+    <div class="weather-details">
+      <div class="weather-detail"><span>💧</span> Humidity: <strong id="humidity">72%</strong></div>
+      <div class="weather-detail"><span>💨</span> Wind: <strong id="wind">12 km/h SW</strong></div>
+      <div class="weather-detail"><span>👁️</span> Visibility: <strong>10 km</strong></div>
+      <div class="weather-detail"><span>🌅</span> Sunrise: <strong>6:18 AM</strong></div>
+      <div class="weather-detail"><span>🌇</span> Sunset: <strong>6:32 PM</strong></div>
+      <div class="weather-detail"><span>🌊</span> Sea Temp: <strong>28°C</strong></div>
+    </div>
+    <div class="sea-conditions">
+      <h3>🌊 Sea Conditions</h3>
+      <div class="sea-item"><span class="sea-label">Wave Height</span><span class="sea-value good" id="waveHeight">0.8m — Calm</span></div>
+      <div class="sea-item"><span class="sea-label">Swimming</span><span class="sea-value good" id="swimming">✅ Safe</span></div>
+      <div class="sea-item"><span class="sea-label">Water Sports</span><span class="sea-value good" id="watersports">✅ Good Conditions</span></div>
+      <div class="sea-item"><span class="sea-label">Jellyfish Alert</span><span class="sea-value good">None Reported</span></div>
+      <div class="sea-item"><span class="sea-label">UV Index</span><span class="sea-value moderate">7 — High</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="rec-section">
+  <h2 class="rec-title">🏖️ Beach Recommendations Today</h2>
+  <p class="rec-subtitle" id="recSubtitle">Based on current weather and sea conditions</p>
+
+  <div class="beach-rec-grid">
+    <div class="beach-rec-card top-pick">
+      <img class="beach-rec-img" src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=500&q=80" alt="Muzhappilangad Beach">
+      <div class="beach-rec-body">
+        <span class="beach-rec-badge badge-best">⭐ Best Today</span>
+        <h3 class="beach-rec-name">Muzhappilangad Beach</h3>
+        <p class="beach-rec-reason">Calm seas and clear skies make today perfect for a drive along Asia's longest drive-in beach. Wind is low — ideal conditions.</p>
+        <div class="beach-conditions">
+          <span class="condition-pill">🌊 Calm Waves</span>
+          <span class="condition-pill">☀️ Sunny</span>
+          <span class="condition-pill">🚗 Drive-In Open</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="beach-rec-card">
+      <img class="beach-rec-img" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&q=80" alt="Payyambalam Beach">
+      <div class="beach-rec-body">
+        <span class="beach-rec-badge badge-good">👍 Good Choice</span>
+        <h3 class="beach-rec-name">Payyambalam Beach</h3>
+        <p class="beach-rec-reason">Great for evening walks and sunset viewing. Safe swimming conditions today. Garden and food stalls open.</p>
+        <div class="beach-conditions">
+          <span class="condition-pill">🌅 Great Sunset</span>
+          <span class="condition-pill">🏊 Safe Swimming</span>
+          <span class="condition-pill">🌴 Garden Open</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="beach-rec-card">
+      <img class="beach-rec-img" src="https://images.unsplash.com/photo-1473186505569-9c61870c11f9?w=500&q=80" alt="Meenkunnu Beach">
+      <div class="beach-rec-body">
+        <span class="beach-rec-badge badge-good">👍 Good Choice</span>
+        <h3 class="beach-rec-name">Meenkunnu Beach</h3>
+        <p class="beach-rec-reason">Perfect for peaceful walks and photography today. Very few visitors, ideal for those wanting a quiet escape.</p>
+        <div class="beach-conditions">
+          <span class="condition-pill">📸 Great for Photos</span>
+          <span class="condition-pill">🤫 Quiet</span>
+          <span class="condition-pill">🌿 Scenic</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TIDE TABLE -->
+<div class="tide-section">
+  <h2 class="tide-title">🌊 Tide Times Today</h2>
+  <p class="tide-subtitle" id="tideDate">Kannur Coast — Arabian Sea</p>
+  <table class="tide-table">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Tide</th>
+        <th>Height</th>
+        <th>Best Activity</th>
+      </tr>
+    </thead>
+    <tbody id="tideBody">
+      <tr><td>3:42 AM</td><td class="high-tide">⬆️ High Tide</td><td>1.8m</td><td>—</td></tr>
+      <tr><td>9:55 AM</td><td class="low-tide">⬇️ Low Tide</td><td>0.3m</td><td>🐚 Rock Pools, Walking</td></tr>
+      <tr><td>4:18 PM</td><td class="high-tide">⬆️ High Tide</td><td>1.6m</td><td>🏄 Swimming, Surfing</td></tr>
+      <tr><td>10:32 PM</td><td class="low-tide">⬇️ Low Tide</td><td>0.4m</td><td>🌙 Moonlit Walk</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- MONTHLY GUIDE -->
+<div class="monthly-section">
+  <h2 class="monthly-title">📅 Monthly Beach Guide — Kannur</h2>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.95rem;">When is the best time to visit Kannur beaches?</p>
+  <div class="monthly-grid">
+    <div class="month-card avoid-month"><div class="month-name">January</div><div class="month-rating">⭐⭐⭐⭐⭐</div><div class="month-desc">Perfect — calm seas, cool breeze, clear skies</div></div>
+    <div class="month-card best-month"><div class="month-name">February</div><div class="month-rating">⭐⭐⭐⭐⭐</div><div class="month-desc">Best month — ideal temperature and sea conditions</div></div>
+    <div class="month-card best-month"><div class="month-name">March</div><div class="month-rating">⭐⭐⭐⭐</div><div class="month-desc">Very good — getting warmer but still pleasant</div></div>
+    <div class="month-card"><div class="month-name">April</div><div class="month-rating">⭐⭐⭐</div><div class="month-desc">Warm and humid — go early morning</div></div>
+    <div class="month-card"><div class="month-name">May</div><div class="month-rating">⭐⭐</div><div class="month-desc">Pre-monsoon — rough seas beginning</div></div>
+    <div class="month-card avoid-month"><div class="month-name">June</div><div class="month-rating">⚠️</div><div class="month-desc">Monsoon — dangerous seas, avoid swimming</div></div>
+    <div class="month-card avoid-month"><div class="month-name">July</div><div class="month-rating">⚠️</div><div class="month-desc">Heavy monsoon — beaches unsafe</div></div>
+    <div class="month-card avoid-month"><div class="month-name">August</div><div class="month-rating">⚠️</div><div class="month-desc">Monsoon continues — not recommended</div></div>
+    <div class="month-card"><div class="month-name">September</div><div class="month-rating">⭐⭐</div><div class="month-desc">Monsoon easing — seas still rough</div></div>
+    <div class="month-card"><div class="month-name">October</div><div class="month-rating">⭐⭐⭐</div><div class="month-desc">Post-monsoon — seas calming down</div></div>
+    <div class="month-card best-month"><div class="month-name">November</div><div class="month-rating">⭐⭐⭐⭐</div><div class="month-desc">Great — cool and calm, Theyyam season starts!</div></div>
+    <div class="month-card best-month"><div class="month-name">December</div><div class="month-rating">⭐⭐⭐⭐⭐</div><div class="month-desc">Excellent — peak season, best weather</div></div>
+  </div>
+</div>
+
+<div class="booking-bar">
+  <div>
+    <h3>🏨 Find Beach Hotels in Kannur</h3>
+    <p>Book hotels close to Kannur's best beaches</p>
+  </div>
+  <div>
+    <a href="https://www.booking.com/searchresults.html?ss=Kannur+Kerala+India" target="_blank" rel="noopener" class="btn-book btn-white">Booking.com</a>
+    <a href="https://www.makemytrip.com/hotels/hotel-listing/?city=Kannur&country=IN" target="_blank" rel="noopener" class="btn-book btn-outline-w">MakeMyTrip</a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 <span>TravelKannur.in</span> — <a href="index.html" style="color:var(--yellow)">← Back to Home</a></p>
+  <p style="margin-top:8px;font-size:0.75rem;">Sea conditions are indicative. Always check with local authorities before swimming.</p>
+</footer>
+
+<script>
+  // Set today's date
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-IN', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  document.getElementById('weatherDate').textContent = 'Kannur, Kerala — ' + dateStr;
+  document.getElementById('tideDate').textContent = 'Kannur Coast — ' + dateStr;
+  document.getElementById('recSubtitle').textContent = 'Best beaches to visit on ' + now.toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'long'});
+
+  // Simple weather variation by month
+  const month = now.getMonth();
+  const isMonsoon = month >= 5 && month <= 8;
+  const isWinter = month >= 10 || month <= 2;
+
+  if(isMonsoon) {
+    document.getElementById('weatherIcon').textContent = '🌧️';
+    document.getElementById('weatherTemp').textContent = '27°C';
+    document.getElementById('weatherDesc').textContent = 'Heavy Monsoon Rain';
+    document.getElementById('waveHeight').textContent = '3.5m — Rough';
+    document.getElementById('waveHeight').className = 'sea-value rough';
+    document.getElementById('swimming').textContent = '❌ Dangerous — Do Not Swim';
+    document.getElementById('swimming').className = 'sea-value rough';
+    document.getElementById('watersports').textContent = '❌ Not Recommended';
+    document.getElementById('watersports').className = 'sea-value rough';
+  } else if(isWinter) {
+    document.getElementById('weatherIcon').textContent = '☀️';
+    document.getElementById('weatherTemp').textContent = '28°C';
+    document.getElementById('weatherDesc').textContent = 'Clear & Sunny — Perfect Beach Day!';
+    document.getElementById('waveHeight').textContent = '0.5m — Very Calm';
+    document.getElementById('waveHeight').className = 'sea-value good';
+  }
+</script>
+</body>
+</html>
