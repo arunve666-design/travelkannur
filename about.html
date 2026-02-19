@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us | Travel Kannur — Kannur Tourism Guide</title>
+<meta name="description" content="About TravelKannur.in — Kerala's most detailed travel guide for Kannur district. Beaches, Theyyam, backwaters, hill stations and local food.">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6684797590545478" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Raleway:wght@300;400;600&family=Noto+Sans+Malayalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--orange:#F4650A;--yellow:#F9C23C;--deep:#1A0A00;--cream:#FFF8EE;--brown:#7A3B10;--light-orange:#FFE0C2;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Raleway',sans-serif;background:var(--cream);color:#333;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 5%;background:rgba(26,10,0,0.95);backdrop-filter:blur(10px);}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--yellow);text-decoration:none;}
+  .nav-logo span{color:var(--orange);}
+  .nav-links{display:flex;gap:24px;list-style:none;}
+  .nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.8rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+  .nav-links a:hover{color:var(--yellow);}
+
+  /* HERO */
+  .hero{min-height:55vh;background:linear-gradient(160deg,var(--deep) 0%,var(--brown) 60%,var(--orange) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 5% 60px;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;inset:0;background:url('theyyam1.jpg') center/cover no-repeat;opacity:0.12;}
+  .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;color:#fff;line-height:1.1;position:relative;}
+  .hero h1 span{color:var(--yellow);}
+  .hero p{color:rgba(255,255,255,0.75);font-size:1.1rem;margin-top:16px;max-width:600px;line-height:1.8;position:relative;}
+  .hero-ml{font-family:'Noto Sans Malayalam',sans-serif;color:var(--yellow);font-size:1.1rem;margin-top:10px;position:relative;}
+
+  /* CONTENT */
+  .main{max-width:1100px;margin:0 auto;padding:70px 5%;}
+
+  /* MISSION */
+  .mission-box{background:#fff;border-radius:24px;padding:48px;margin-bottom:60px;box-shadow:0 8px 40px rgba(122,59,16,0.08);border-left:5px solid var(--orange);}
+  .mission-box h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--deep);margin-bottom:20px;}
+  .mission-box p{color:#555;line-height:1.9;font-size:1.05rem;margin-bottom:16px;}
+
+  /* WHAT WE OFFER */
+  .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;margin-bottom:60px;}
+  .feature-card{background:#fff;border-radius:20px;padding:32px 24px;box-shadow:0 4px 20px rgba(122,59,16,0.07);text-align:center;transition:transform 0.3s;}
+  .feature-card:hover{transform:translateY(-6px);}
+  .feature-icon{font-size:2.5rem;margin-bottom:16px;display:block;}
+  .feature-card h3{font-family:'Playfair Display',serif;color:var(--deep);margin-bottom:10px;font-size:1.1rem;}
+  .feature-card p{font-size:0.88rem;color:#666;line-height:1.7;}
+
+  /* STATS */
+  .stats-bar{background:var(--deep);border-radius:20px;padding:40px 48px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:60px;text-align:center;}
+  .stat-num{font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--yellow);font-weight:900;line-height:1;}
+  .stat-label{font-size:0.75rem;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;margin-top:6px;}
+
+  /* ABOUT KANNUR */
+  .about-kannur{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:60px;}
+  .about-kannur img{width:100%;height:380px;object-fit:cover;border-radius:20px;box-shadow:0 16px 48px rgba(122,59,16,0.15);}
+  .about-kannur h2{font-family:'Playfair Display',serif;font-size:2rem;color:var(--deep);margin-bottom:20px;}
+  .about-kannur p{color:#555;line-height:1.9;font-size:1rem;margin-bottom:16px;}
+
+  /* CONTACT CTA */
+  .contact-cta{background:linear-gradient(135deg,var(--orange),var(--brown));border-radius:24px;padding:48px;text-align:center;margin-bottom:60px;}
+  .contact-cta h2{font-family:'Playfair Display',serif;font-size:2rem;color:#fff;margin-bottom:12px;}
+  .contact-cta p{color:rgba(255,255,255,0.8);margin-bottom:28px;font-size:1rem;line-height:1.7;}
+  .btn{display:inline-block;padding:14px 32px;border-radius:50px;text-decoration:none;font-weight:700;font-size:0.95rem;transition:transform 0.2s,box-shadow 0.2s;margin:6px;}
+  .btn:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,0.2);}
+  .btn-white{background:#fff;color:var(--orange);}
+  .btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.5);}
+
+  footer{background:var(--deep);color:rgba(255,255,255,0.4);text-align:center;padding:32px 5%;font-size:0.85rem;}
+  footer span{color:var(--yellow);}
+  footer a{color:var(--yellow);text-decoration:none;}
+
+  @media(max-width:768px){.nav-links{display:none;}.about-kannur{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Travel<span>Kannur</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="theyyam.html">Theyyam</a></li>
+    <li><a href="beaches.html">Beaches</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <h1>About <span>TravelKannur</span></h1>
+  <p>Kerala's most detailed travel guide for Kannur district — built by locals, for travellers from around the world.</p>
+  <p class="hero-ml">കണ്ണൂരിനെ അറിയൂ, കണ്ണൂർ അനുഭവിക്കൂ</p>
+</div>
+
+<div class="main">
+
+  <!-- MISSION -->
+  <div class="mission-box">
+    <h2>Our Mission</h2>
+    <p>TravelKannur.in was created with one simple goal — to help travellers discover the real Kannur. Not just the famous beaches, but the ancient Theyyam rituals, the misty hill stations, the serene backwaters and the extraordinary Malabar food culture that makes this corner of Kerala unlike anywhere else on earth.</p>
+    <p>Kannur is one of India's most culturally rich destinations, yet most travel websites give it just a paragraph or two. We believe it deserves much more. Every page on this site is written with genuine knowledge and love for this region.</p>
+    <p>We provide the <strong>only complete English-language Theyyam Calendar</strong> for Kannur, daily beach conditions, hill station trekking guides and authentic local food recommendations — content that exists nowhere else online.</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div>
+      <div class="stat-num">7</div>
+      <div class="stat-label">Destination Guides</div>
+    </div>
+    <div>
+      <div class="stat-num">29+</div>
+      <div class="stat-label">Theyyam Events</div>
+    </div>
+    <div>
+      <div class="stat-num">5</div>
+      <div class="stat-label">Beaches Covered</div>
+    </div>
+    <div>
+      <div class="stat-num">Free</div>
+      <div class="stat-label">Always Free to Use</div>
+    </div>
+  </div>
+
+  <!-- WHAT WE OFFER -->
+  <h2 style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--deep);margin-bottom:8px;">What You'll Find Here</h2>
+  <p style="color:#777;margin-bottom:32px;">Everything a traveller needs to explore Kannur</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">🔥</span>
+      <h3>Theyyam Calendar</h3>
+      <p>The only complete English schedule of Theyyam performances across Kannur — dates, venues and visitor tips for every event.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🏖️</span>
+      <h3>Beach Guides</h3>
+      <p>Detailed guides to all 5 major Kannur beaches including daily sea conditions, tide times and best time to visit.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🚤</span>
+      <h3>Kavvayi Backwaters</h3>
+      <p>Complete guide to Kerala's second largest backwater — boat rides, bird watching and island villages.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">⛰️</span>
+      <h3>Hill Stations</h3>
+      <p>Trekking guides for Paithalmala, Palakkayam Thattu and Malom — with altitude, difficulty and permit information.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📰</span>
+      <h3>Daily News</h3>
+      <p>Kannur and Kerala news updated automatically every morning at 8 AM — stay informed about local events.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🏨</span>
+      <h3>Hotel Booking</h3>
+      <p>Find and book hotels near every destination through our trusted partners Booking.com and MakeMyTrip.</p>
+    </div>
+  </div>
+
+  <!-- ABOUT KANNUR -->
+  <div class="about-kannur">
+    <img src="theyyam2.jpg" alt="Theyyam Kannur Kerala">
+    <div>
+      <h2>Why Kannur?</h2>
+      <p>Kannur — also known as Cannanore — is the cultural capital of North Kerala. It sits on the Malabar Coast and has been a centre of trade, art and tradition for over a thousand years.</p>
+      <p>It is home to <strong>Theyyam</strong> — one of the world's oldest living ritual art forms, performed in hundreds of temples across the district every year between November and May. Watching a Theyyam is one of the most powerful cultural experiences available anywhere in India.</p>
+      <p>Beyond Theyyam, Kannur has <strong>Asia's longest drive-in beach</strong> at Muzhappilangad, the serene <strong>Kavvayi backwaters</strong>, dramatic hill stations and the incredible <strong>Malabar cuisine</strong> that food lovers travel across India to taste.</p>
+      <p style="font-family:'Noto Sans Malayalam',sans-serif;color:var(--brown);font-size:0.95rem;">കണ്ണൂർ — നെയ്ത്തിന്റെയും തെയ്യത്തിന്റെയും നാട്</p>
+    </div>
+  </div>
+
+  <!-- CONTACT CTA -->
+  <div class="contact-cta">
+    <h2>Planning a Trip to Kannur?</h2>
+    <p>We'd love to help you plan the perfect Kannur experience. Send us a message and we'll get back to you with personalised tips and recommendations.</p>
+    <a href="index.html#contact" class="btn btn-white">✉️ Contact Us</a>
+    <a href="theyyam.html" class="btn btn-outline">🔥 View Theyyam Calendar</a>
+  </div>
+
+  <!-- AD -->
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6684797590545478" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+</div>
+
+<footer>
+  <p>© 2026 <span>TravelKannur.in</span> — <a href="index.html">Home</a> | <a href="privacy.html">Privacy Policy</a> | <a href="index.html#contact">Contact</a></p>
+</footer>
+
+</body>
+</html>
