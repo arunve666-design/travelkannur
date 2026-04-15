@@ -46,20 +46,32 @@ FEEDS = [
     },
 ]
 
+# All Kannur district assembly constituencies + broader Kannur area terms
+KANNUR_KEYWORDS = [
+    'kannur', 'north kerala', 'malabar',
+    # Assembly constituencies in Kannur district
+    'payyannur', 'payyanur', 'kalliassery', 'dharmadom', 'thalassery',
+    'kuthuparamba', 'koothuparamba', 'iritty', 'mattannur', 'peravoor',
+    'sreekandapuram', 'azhikode', 'irikkur',
+    # Towns / taluks
+    'kannavam', 'taliparamba', 'panoor', 'chirakkal', 'anthoor',
+    'edakkad', 'valapattanam',
+]
+
 ELECTION_KEYWORDS = [
     'election', 'elections', 'vote', 'voting', 'ballot', 'candidate', 'constituency',
     'eci', 'poll', 'polls', 'polling', 'campaign', 'campaigning',
-    'bjp', 'congress', 'cpim', 'udf', 'ldf', 'nda', 'upa',
-    'mp', 'mla', 'assembly', 'lok sabha', 'rajya sabha',
-    'seat', 'seats', 'manifesto', 'bypolls', 'by-election', 'by election',
+    'bjp', 'congress', 'cpim', 'cpi(m)', 'udf', 'ldf', 'nda', 'upa',
+    'mla', 'assembly', 'lok sabha', 'rajya sabha',
+    'bypoll', 'bypolls', 'by-election', 'by election',
     'electoral', 'electorate', 'voter', 'voters', 'turnout',
     'result', 'results', 'winner', 'defeat', 'victory',
-    'nomination', 'nominee', 'party', 'alliance',
-    'kannur constituency', 'kerala election', 'kerala vote',
-    'pinarayi', 'opposition leader', 'chief minister', 'cm candidate',
+    'nomination', 'nominee', 'alliance',
+    'kerala election', 'kerala vote', 'kerala poll',
+    'pinarayi', 'vd satheesan', 'satheesan', 'sudhakaran', 'p k kunhalikutty',
+    'opposition leader', 'chief minister',
+    'tharoor', 'rahul gandhi', 'modi', 'amit shah',
 ]
-
-KANNUR_KEYWORDS = ['kannur', 'malabar', 'thalassery', 'payyanur', 'iritty', 'north kerala']
 
 
 def clean_html(text):
@@ -68,14 +80,23 @@ def clean_html(text):
     return text.strip()
 
 
-def is_election(title, desc):
+def is_kannur_related(title, desc):
+    t = (title + ' ' + desc).lower()
+    return any(k in t for k in KANNUR_KEYWORDS)
+
+
+def is_election_related(title, desc):
     t = (title + ' ' + desc).lower()
     return any(k in t for k in ELECTION_KEYWORDS)
 
 
+# Keep old names as aliases for existing code
+def is_election(title, desc):
+    return is_election_related(title, desc)
+
+
 def is_kannur(title, desc):
-    t = (title + ' ' + desc).lower()
-    return any(k in t for k in KANNUR_KEYWORDS)
+    return is_kannur_related(title, desc)
 
 
 def fetch_feed(url):
@@ -102,8 +123,14 @@ def fetch_election_news():
                 elif hasattr(entry, 'enclosures') and entry.enclosures:
                     img = entry.enclosures[0].get('href', '')
 
-                # force_include means include all videos (e.g. Kannur Vision)
-                if title and (feed_info.get('force_include') or is_election(title, desc)):
+                # Kannur Vision: include everything (local Kannur channel)
+                # Other feeds: include only if Kannur-related AND election-related
+                kannur = feed_info.get('force_kannur', False) or is_kannur_related(title, desc)
+                include = (
+                    feed_info.get('force_include')
+                    or (kannur and is_election_related(title, desc))
+                )
+                if title and include:
                     all_items.append({
                         'title': title,
                         'desc': desc[:200] + '...' if len(desc) > 200 else desc,
@@ -111,7 +138,7 @@ def fetch_election_news():
                         'img': img,
                         'source': feed_info['source'],
                         'emoji': feed_info['emoji'],
-                        'is_kannur': feed_info.get('force_kannur', False) or is_kannur(title, desc),
+                        'is_kannur': kannur,
                     })
         except Exception as e:
             print(f"Error fetching {feed_info['source']}: {e}")
