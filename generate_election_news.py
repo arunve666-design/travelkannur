@@ -13,6 +13,13 @@ time_str = now.strftime('%I:%M %p IST')
 # RSS Feeds — mix of national and Kerala sources
 FEEDS = [
     {
+        'url': 'https://www.youtube.com/feeds/videos.xml?channel_id=UCqCH1uDvmbPOpBBxcGBooxw',
+        'source': 'Kannur Vision',
+        'emoji': '📡',
+        'force_include': True,
+        'force_kannur': True,
+    },
+    {
         'url': 'https://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms',
         'source': 'Times of India Kerala',
         'emoji': '🗞️'
@@ -71,22 +78,32 @@ def is_kannur(title, desc):
     return any(k in t for k in KANNUR_KEYWORDS)
 
 
+def fetch_feed(url):
+    try:
+        r = requests.get(url, timeout=15, headers={'User-Agent': 'Mozilla/5.0'}, verify=False)
+        return feedparser.parse(r.text)
+    except Exception:
+        return feedparser.parse(url)
+
 def fetch_election_news():
     all_items = []
     for feed_info in FEEDS:
         try:
-            feed = feedparser.parse(feed_info['url'])
+            feed = fetch_feed(feed_info['url'])
             for entry in feed.entries[:20]:
                 title = clean_html(entry.get('title', ''))
                 desc = clean_html(entry.get('summary', entry.get('description', '')))
                 link = entry.get('link', '#')
                 img = ''
-                if hasattr(entry, 'media_content') and entry.media_content:
+                if hasattr(entry, 'media_thumbnail') and entry.media_thumbnail:
+                    img = entry.media_thumbnail[0].get('url', '')
+                elif hasattr(entry, 'media_content') and entry.media_content:
                     img = entry.media_content[0].get('url', '')
                 elif hasattr(entry, 'enclosures') and entry.enclosures:
                     img = entry.enclosures[0].get('href', '')
 
-                if title and is_election(title, desc):
+                # force_include means include all videos (e.g. Kannur Vision)
+                if title and (feed_info.get('force_include') or is_election(title, desc)):
                     all_items.append({
                         'title': title,
                         'desc': desc[:200] + '...' if len(desc) > 200 else desc,
@@ -94,7 +111,7 @@ def fetch_election_news():
                         'img': img,
                         'source': feed_info['source'],
                         'emoji': feed_info['emoji'],
-                        'is_kannur': is_kannur(title, desc),
+                        'is_kannur': feed_info.get('force_kannur', False) or is_kannur(title, desc),
                     })
         except Exception as e:
             print(f"Error fetching {feed_info['source']}: {e}")
