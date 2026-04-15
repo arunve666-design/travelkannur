@@ -211,11 +211,11 @@ def generate_html(items):
     <!-- SIDEBAR AD -->
     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6684797590545478" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
-    <!-- HOTEL BOOKING -->
+    <!-- CONTACT -->
     <div style="background:linear-gradient(135deg,rgba(244,101,10,0.1),rgba(122,59,16,0.15));border:1px solid rgba(244,101,10,0.2);border-radius:16px;padding:24px;margin-top:20px;">
-      <h3 style="font-family:'Playfair Display',serif;color:var(--yellow);margin-bottom:12px;font-size:1rem;">🏨 Book Hotels in Kannur</h3>
-      <a href="https://www.booking.com/searchresults.html?ss=Kannur+Kerala+India" target="_blank" rel="noopener" style="display:block;background:#F4650A;color:#fff;text-align:center;padding:12px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.88rem;margin-bottom:10px;">🌐 Booking.com</a>
-      <a href="https://www.makemytrip.com/hotels/hotel-listing/?city=Kannur&country=IN" target="_blank" rel="noopener" style="display:block;background:#e8192c;color:#fff;text-align:center;padding:12px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.88rem;">✈️ MakeMyTrip</a>
+      <h3 style="font-family:'Playfair Display',serif;color:var(--yellow);margin-bottom:10px;font-size:1rem;">📧 Get in Touch</h3>
+      <p style="color:rgba(255,255,255,0.6);font-size:0.85rem;line-height:1.6;margin-bottom:14px;">For travel tips, local recommendations or trip planning help, write to us.</p>
+      <a href="mailto:info@travelkannur.in" style="display:block;background:#F4650A;color:#fff;text-align:center;padding:12px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.88rem;">✉️ info@travelkannur.in</a>
     </div>
   </div>
 </div>
