@@ -313,7 +313,7 @@ def generate_html(items):
 
 <footer style="background:#080808;color:rgba(255,255,255,0.3);text-align:center;padding:32px 5%;font-size:0.85rem;border-top:1px solid rgba(255,255,255,0.05);">
   <p>© 2026 <span style="color:var(--yellow);">TravelKannur.in</span> — <a href="index.html" style="color:var(--yellow);">← Home</a> · <a href="news.html" style="color:var(--yellow);">Kannur News</a></p>
-  <p style="margin-top:6px;font-size:0.75rem;">Auto-updated daily at 8:00 AM IST. News content belongs to respective publishers.</p>
+  <p style="margin-top:6px;font-size:0.75rem;">Auto-updated every hour. News content belongs to respective publishers.</p>
 </footer>
 
 <style>@keyframes pulse{{0%,100%{{opacity:1;transform:scale(1);}}50%{{opacity:0.5;transform:scale(1.4);}}}}</style>

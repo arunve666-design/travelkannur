@@ -1,9 +1,9 @@
-name: Daily Kannur News Update
+name: Hourly News Update
 
 on:
   schedule:
-    # 8:00 AM IST = 2:30 AM UTC
-    - cron: '30 2 * * *'
+    # Every hour
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -25,10 +25,13 @@ jobs:
       - name: Generate news page
         run: python generate_news.py
 
+      - name: Generate election news page
+        run: python generate_election_news.py
+
       - name: Commit and push updated news
         run: |
           git config --global user.name "TravelKannur Bot"
           git config --global user.email "info@travelkannur.in"
-          git add news.html
+          git add news.html election_news.html
           git diff --staged --quiet || git commit -m "Auto news update - $(date +'%d %b %Y %H:%M IST')"
           git push
