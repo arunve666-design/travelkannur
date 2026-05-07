@@ -349,7 +349,6 @@ def generate_html(live_items):
     <li><a href="index.html">Home</a></li>
     <li><a href="news.html">News</a></li>
     <li><a href="theyyam.html">Theyyam</a></li>
-    <li><a href="election_news.html">Elections</a></li>
     <li><a href="beaches.html">Beaches</a></li>
   </ul>
 </nav>
