@@ -323,6 +323,7 @@ def generate_html(live_items):
 <head>
 <meta charset="UTF-8">
 <link rel="canonical" href="https://travelkannur.in/events.html">
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"WebPage","name":"Events in Kannur Today","url":"https://travelkannur.in/events.html","description":"What is happening in Kannur today — festivals, cultural events and activities within 150 km of Kannur, updated every day.","about":{{"@type":"TouristDestination","name":"Kannur","address":{{"@type":"PostalAddress","addressLocality":"Kannur","addressRegion":"Kerala","addressCountry":"IN"}}}}}}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Events in Kannur Today — {today_str} | Travel Kannur</title>
 <meta name="description" content="What's happening in Kannur today, {today_str}? Events, festivals, activities within 150 km of Kannur — updated every day.">

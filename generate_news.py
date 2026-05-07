@@ -140,6 +140,7 @@ def generate_html(items):
 <head>
 <meta charset="UTF-8">
 <link rel="canonical" href="https://travelkannur.in/news.html">
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"NewsMediaOrganization","name":"Travel Kannur News","url":"https://travelkannur.in/news.html","description":"Latest Kannur and Kerala news updated daily — tourism, events, and local updates from Kannur district.","address":{{"@type":"PostalAddress","addressLocality":"Kannur","addressRegion":"Kerala","addressCountry":"IN"}}}}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kannur News Today {now.strftime('%d %B %Y')} — Latest Kerala News | Travel Kannur</title>
 <meta name="description" content="Latest Kannur and Kerala news for {today_str}. Tourism, events, weather and local updates from Kannur district — updated every morning at 8 AM.">
