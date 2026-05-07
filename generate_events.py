@@ -322,6 +322,7 @@ def generate_html(live_items):
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="canonical" href="https://www.travelkannur.in/events.html">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Events in Kannur Today — {today_str} | Travel Kannur</title>
 <meta name="description" content="What's happening in Kannur today, {today_str}? Events, festivals, activities within 150 km of Kannur — updated every day.">

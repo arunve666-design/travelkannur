@@ -139,6 +139,7 @@ def generate_html(items):
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="canonical" href="https://www.travelkannur.in/news.html">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kannur News Today {now.strftime('%d %B %Y')} — Latest Kerala News | Travel Kannur</title>
 <meta name="description" content="Latest Kannur and Kerala news for {today_str}. Tourism, events, weather and local updates from Kannur district — updated every morning at 8 AM.">
