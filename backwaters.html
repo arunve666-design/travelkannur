@@ -32,6 +32,9 @@
   .main-content{max-width:1100px;margin:0 auto;padding:70px 5%;}
   .intro-box{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:70px;}
   .intro-img{width:100%;height:420px;object-fit:cover;border-radius:24px;box-shadow:0 16px 48px rgba(10,110,110,0.2);}
+  .intro-gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px;}
+  .intro-gallery img{width:100%;height:100px;object-fit:cover;border-radius:10px;cursor:pointer;transition:transform 0.25s,box-shadow 0.25s;}
+  .intro-gallery img:hover{transform:scale(1.04);box-shadow:0 6px 18px rgba(10,110,110,0.25);}
   .intro-content h2{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--deep);margin-bottom:20px;line-height:1.2;}
   .intro-content p{color:#555;line-height:1.9;font-size:1rem;margin-bottom:16px;}
   .highlight-tag{display:inline-block;background:var(--light-teal);color:var(--teal);font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:16px;}
@@ -97,7 +100,12 @@
   <div class="ad-slot"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6684797590545478" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
 
   <div class="intro-box reveal">
+    <div>
     <img class="intro-img" src="https://upload.wikimedia.org/wikipedia/commons/1/17/Kavvayi_island.jpg" alt="Kavvayi Backwaters Kannur Kerala">
+    <div class="intro-gallery">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Boat_jetty_of_Kavvayi.jpg" alt="Boat jetty at Kavvayi">
+    </div>
+    </div>
     <div class="intro-content">
       <span class="highlight-tag">Kerala's Best Kept Secret</span>
       <h2>Kavvayi Backwaters <span class="malayalam">കവ്വായി കായൽ</span></h2>
