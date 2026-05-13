@@ -324,10 +324,11 @@ def generate_html(live_items):
 <meta charset="UTF-8">
 <link rel="canonical" href="https://travelkannur.in/events.html">
 <script type="application/ld+json">{{"@context":"https://schema.org","@type":"WebPage","name":"Events in Kannur Today","url":"https://travelkannur.in/events.html","description":"What is happening in Kannur today — festivals, cultural events and activities within 150 km of Kannur, updated every day.","about":{{"@type":"TouristDestination","name":"Kannur","address":{{"@type":"PostalAddress","addressLocality":"Kannur","addressRegion":"Kerala","addressCountry":"IN"}}}}}}</script>
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"Festival","name":"Kannur Carnival","alternateName":["Payyambalam Beach Festival","Kannur Beach Festival"],"description":"Annual beach carnival at Payyambalam Beach, Kannur — cultural performances, kite festival, Malabar food stalls, handicraft bazaars and fireworks.","location":{{"@type":"Place","name":"Payyambalam Beach","address":{{"@type":"PostalAddress","addressLocality":"Kannur","addressRegion":"Kerala","postalCode":"670002","addressCountry":"IN"}},"geo":{{"@type":"GeoCoordinates","latitude":11.8745,"longitude":75.3704}}}},"organizer":{{"@type":"Organization","name":"DTPC Kannur","url":"https://www.dtpckannur.com/"}},"offers":{{"@type":"Offer","price":"0","priceCurrency":"INR","availability":"https://schema.org/InStock"}},"eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","url":"https://travelkannur.in/events.html#kannur-carnival","image":["https://upload.wikimedia.org/wikipedia/commons/e/e2/Kannur_Kite_Festival%2C_Payyambalam_Beach%2C_Kannur_04.05.2018_01.jpg","https://upload.wikimedia.org/wikipedia/commons/5/57/Kannur_Kite_Festival%2C_Payyambalam_Beach%2C_Kannur_04.05.2018_05.jpg"]}}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Events in Kannur Today — {today_str} | Travel Kannur</title>
-<meta name="description" content="What's happening in Kannur today, {today_str}? Events, festivals, activities within 150 km of Kannur — updated every day.">
-<meta name="keywords" content="Kannur events today, things to do Kannur, Kerala events today, Kannur festival today, Malabar events">
+<title>Kannur Carnival 2026 &amp; Events in Kannur Today — {today_str} | Travel Kannur</title>
+<meta name="description" content="Kannur Carnival 2026 at Payyambalam Beach — schedule, what to expect &amp; photos. Plus all events, festivals and activities in Kannur and within 150 km, updated daily ({today_str}).">
+<meta name="keywords" content="Kannur Carnival, Kannur Carnival 2026, Payyambalam beach festival, Kannur beach festival, Kannur events today, Kannur kite festival, things to do Kannur, Kerala events today, Kannur festival today, Malabar events">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6684797590545478" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Raleway:wght@300;400;600;700&family=Noto+Sans+Malayalam:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -394,6 +395,76 @@ def generate_html(live_items):
 <div style="max-width:1100px;margin:24px auto;padding:0 5%;">
   <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6684797590545478" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
   <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
+</div>
+
+<!-- FEATURED EVENT: KANNUR CARNIVAL -->
+<div id="kannur-carnival" style="max-width:1100px;margin:0 auto 40px;padding:0 5%;">
+  <div style="background:linear-gradient(135deg,#3d1a0a 0%,#7a3b10 50%,#F4650A 100%);border-radius:24px;padding:40px;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(244,101,10,0.25);">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(46,204,113,0.95);color:#0f1a0f;font-size:0.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:30px;margin-bottom:18px;">
+      <span style="width:8px;height:8px;background:#0f1a0f;border-radius:50%;animation:pulse 1.5s infinite;display:inline-block;"></span>
+      🎉 Happening Now
+    </div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:8px;">
+      Kannur Carnival <span style="color:var(--yellow);">2026</span>
+    </h2>
+    <p style="font-family:'Noto Sans Malayalam',sans-serif;color:var(--yellow);font-size:1.1rem;margin-bottom:18px;">കണ്ണൂർ കാർണിവൽ — ഉത്സവം പയ്യാമ്പലം ബീച്ചിൽ</p>
+    <p style="color:rgba(255,255,255,0.92);font-size:1rem;line-height:1.75;margin-bottom:14px;max-width:760px;">
+      <strong style="color:var(--yellow);">Kannur Carnival</strong> is the annual beach festival hosted at Payyambalam Beach — Kannur's most famous coastline. The carnival brings together the very best of Malabar culture: live music, classical and folk dance performances, drumming troupes, food stalls, handicraft bazaars, kite flying, beach sports and spectacular evening fireworks over the Arabian Sea.
+    </p>
+    <p style="color:rgba(255,255,255,0.85);font-size:0.95rem;line-height:1.75;margin-bottom:18px;max-width:760px;">
+      Organised by DTPC Kannur in coordination with Kerala Tourism, the carnival is a vibrant celebration of North Kerala's heritage — Theyyam demonstrations, Malabari cuisine pop-ups (Kallummakkaya, Pathiri, Malabar Biryani), boat rides, photo walks and family-friendly entertainment from morning until late evening.
+    </p>
+
+    <!-- INFO PILLS -->
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;">
+      <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">📍 Payyambalam Beach, Kannur</span>
+      <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">🕐 Morning to late evening</span>
+      <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">🎟️ Entry: Free</span>
+      <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">🚗 5 min from Kannur city centre</span>
+      <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">👨‍👩‍👧 Family-friendly</span>
+    </div>
+
+    <!-- IMAGE GALLERY -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:24px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e2/Kannur_Kite_Festival%2C_Payyambalam_Beach%2C_Kannur_04.05.2018_01.jpg" alt="Kannur Carnival kite flying at Payyambalam Beach" style="width:100%;height:140px;object-fit:cover;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.3);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/Kannur_Kite_Festival%2C_Payyambalam_Beach%2C_Kannur_04.05.2018_03.jpg" alt="Kannur Carnival cultural performance Payyambalam" style="width:100%;height:140px;object-fit:cover;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.3);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/57/Kannur_Kite_Festival%2C_Payyambalam_Beach%2C_Kannur_04.05.2018_05.jpg" alt="Kannur Carnival crowd beach festival Kerala" style="width:100%;height:140px;object-fit:cover;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.3);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Kannur_Kite_Festival%2C_Payyambalam_Beach%2C_Kannur_04.05.2018_07.jpg" alt="Kannur Carnival evening at Payyambalam Beach" style="width:100%;height:140px;object-fit:cover;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.3);">
+    </div>
+
+    <!-- WHAT TO EXPECT -->
+    <div style="background:rgba(0,0,0,0.3);border-radius:16px;padding:20px 24px;margin-bottom:20px;">
+      <h3 style="color:var(--yellow);font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:12px;">✨ What to expect at Kannur Carnival</h3>
+      <ul style="list-style:none;padding:0;color:rgba(255,255,255,0.85);font-size:0.9rem;line-height:1.9;">
+        <li>🎭 <strong>Cultural performances</strong> — Theyyam recitals, Kerala folk dances, Mappila songs &amp; classical music</li>
+        <li>🪁 <strong>Kite flying competitions</strong> — the kite festival is the most iconic feature of the carnival</li>
+        <li>🍛 <strong>Malabar food stalls</strong> — Kallummakkaya, Pathiri, fish curry, Malabar Biryani, Halwa</li>
+        <li>🛍️ <strong>Handicraft &amp; handloom bazaars</strong> — Kannur's famous handloom textiles on sale</li>
+        <li>🎆 <strong>Evening fireworks</strong> over the Arabian Sea on closing day</li>
+        <li>🏖️ <strong>Beach games</strong> — sand sculpting, beach volleyball, kids' play zones</li>
+      </ul>
+    </div>
+
+    <!-- HOW TO REACH -->
+    <div style="background:rgba(0,0,0,0.3);border-radius:16px;padding:20px 24px;margin-bottom:20px;">
+      <h3 style="color:var(--yellow);font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:12px;">🚗 How to reach Payyambalam Beach</h3>
+      <p style="color:rgba(255,255,255,0.85);font-size:0.9rem;line-height:1.75;">
+        Payyambalam is just <strong>2 km from Kannur city centre</strong> and <strong>3 km from Kannur Railway Station</strong>.
+        From Kannur International Airport (CNN), it is about <strong>30 km / 45 minutes by taxi</strong>. Plenty of free parking is available at the beach park.
+      </p>
+    </div>
+
+    <!-- CTAs -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="beaches.html" style="background:var(--yellow);color:#3d1a0a;font-weight:800;padding:12px 24px;border-radius:30px;text-decoration:none;font-size:0.9rem;">🏖️ Payyambalam Beach Guide</a>
+      <a href="theyyam.html" style="background:rgba(255,255,255,0.15);color:#fff;font-weight:700;padding:12px 24px;border-radius:30px;text-decoration:none;font-size:0.9rem;border:1px solid rgba(255,255,255,0.2);">🔥 Theyyam Calendar</a>
+      <a href="mailto:info@travelkannur.in?subject=Kannur Carnival 2026" style="background:rgba(255,255,255,0.15);color:#fff;font-weight:700;padding:12px 24px;border-radius:30px;text-decoration:none;font-size:0.9rem;border:1px solid rgba(255,255,255,0.2);">📧 Ask About the Carnival</a>
+    </div>
+
+    <p style="color:rgba(255,255,255,0.55);font-size:0.75rem;margin-top:16px;font-style:italic;">
+      Exact dates for the 2026 edition of Kannur Carnival are announced annually by DTPC Kannur — contact us for the latest schedule. Photos: Kannur Kite Festival at Payyambalam Beach (CC, Wikimedia Commons).
+    </p>
+  </div>
 </div>
 
 <!-- MAIN GRID -->
