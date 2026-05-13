@@ -13,6 +13,19 @@ date_short  = now.strftime('%d %B')
 weekday     = now.strftime('%A').lower()
 is_weekend  = now.weekday() >= 5
 
+# ── Kannur Carnival 2026 dates ────────────────────────────────────────────────
+CARNIVAL_START = datetime(2026, 5, 1, tzinfo=IST)
+CARNIVAL_END   = datetime(2026, 5, 31, 23, 59, tzinfo=IST)
+carnival_active = CARNIVAL_START <= now <= CARNIVAL_END
+if carnival_active:
+    carnival_day = (now.date() - CARNIVAL_START.date()).days + 1
+    carnival_days_left = (CARNIVAL_END.date() - now.date()).days
+    carnival_status_label = f"Day {carnival_day} of 31 · {carnival_days_left} days left"
+else:
+    carnival_day = 0
+    carnival_days_left = 0
+    carnival_status_label = "1–31 May 2026"
+
 # ── Areas within 150 km of Kannur ────────────────────────────────────────────
 AREAS = [
     {'name': 'Kannur',     'km': 0,   'emoji': '📍', 'state': 'Kerala'},
@@ -315,8 +328,8 @@ def generate_html(live_items):
     others     = [ev for ev in RECURRING if not ev['star']]
     recurring_html = ''.join(render_recurring_card(ev) for ev in highlights + others)
 
-    # +1 for the featured Kannur Carnival event (always shown at top of page)
-    featured_count = 1
+    # +1 for the featured Kannur Carnival event while it is running (1–31 May 2026)
+    featured_count = 1 if carnival_active else 0
     kannur_count  = sum(1 for i in live_items if i['km'] == 0) + featured_count
     nearby_count  = sum(1 for i in live_items if i['km'] > 0)
     total_count   = len(live_items) + featured_count
@@ -327,10 +340,10 @@ def generate_html(live_items):
 <meta charset="UTF-8">
 <link rel="canonical" href="https://travelkannur.in/events.html">
 <script type="application/ld+json">{{"@context":"https://schema.org","@type":"WebPage","name":"Events in Kannur Today","url":"https://travelkannur.in/events.html","description":"What is happening in Kannur today — festivals, cultural events and activities within 150 km of Kannur, updated every day.","about":{{"@type":"TouristDestination","name":"Kannur","address":{{"@type":"PostalAddress","addressLocality":"Kannur","addressRegion":"Kerala","addressCountry":"IN"}}}}}}</script>
-<script type="application/ld+json">{{"@context":"https://schema.org","@type":"Festival","name":"Kannur Carnival 2026","alternateName":["Kannur Carnival","Kannur Fair"],"description":"Annual carnival fair at Police Maidan, Kannur — amusement rides, food stalls, shopping bazaars, live entertainment, games and family activities.","location":{{"@type":"Place","name":"Police Maidan (Police Ground), Kannur","address":{{"@type":"PostalAddress","addressLocality":"Kannur","addressRegion":"Kerala","postalCode":"670001","addressCountry":"IN"}},"geo":{{"@type":"GeoCoordinates","latitude":11.8689,"longitude":75.3556}}}},"eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","url":"https://travelkannur.in/events.html#kannur-carnival","sameAs":"https://www.instagram.com/kannurcarnival2026/"}}</script>
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"Festival","name":"Kannur Carnival 2026","alternateName":["Kannur Carnival","Kannur Fair"],"description":"Month-long carnival fair at Police Maidan, Kannur, running 1–31 May 2026 — amusement rides, food stalls, shopping bazaars, live entertainment, games and family activities.","startDate":"2026-05-01T17:00+05:30","endDate":"2026-05-31T23:00+05:30","location":{{"@type":"Place","name":"Police Maidan (Police Ground), Kannur","address":{{"@type":"PostalAddress","addressLocality":"Kannur","addressRegion":"Kerala","postalCode":"670001","addressCountry":"IN"}},"geo":{{"@type":"GeoCoordinates","latitude":11.8689,"longitude":75.3556}}}},"eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","url":"https://travelkannur.in/events.html#kannur-carnival","sameAs":"https://www.instagram.com/kannurcarnival2026/"}}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kannur Carnival 2026 at Police Maidan &amp; Events in Kannur Today — {today_str} | Travel Kannur</title>
-<meta name="description" content="Kannur Carnival 2026 is on now at Police Maidan, Kannur — rides, food stalls, shopping, live entertainment. Plus all events &amp; festivals in Kannur and within 150 km, updated daily ({today_str}).">
+<meta name="description" content="Kannur Carnival 2026 runs 1–31 May at Police Maidan, Kannur — rides, food stalls, shopping, live entertainment. Plus all events &amp; festivals in Kannur and within 150 km, updated daily ({today_str}).">
 <meta name="keywords" content="Kannur Carnival, Kannur Carnival 2026, Kannur Carnival Police Maidan, Police Maidan Kannur, Kannur fair, Kannur city events, Kannur events today, things to do Kannur, Kerala events today, Kannur festival today, Malabar events, Kannur carnival Instagram">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6684797590545478" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Raleway:wght@300;400;600;700&family=Noto+Sans+Malayalam:wght@400;700&display=swap" rel="stylesheet">
@@ -403,16 +416,24 @@ def generate_html(live_items):
 <!-- FEATURED EVENT: KANNUR CARNIVAL -->
 <div id="kannur-carnival" style="max-width:1100px;margin:0 auto 40px;padding:0 5%;">
   <div style="background:linear-gradient(135deg,#3d1a0a 0%,#7a3b10 50%,#F4650A 100%);border-radius:24px;padding:40px;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(244,101,10,0.25);">
-    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(46,204,113,0.95);color:#0f1a0f;font-size:0.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:30px;margin-bottom:18px;">
-      <span style="width:8px;height:8px;background:#0f1a0f;border-radius:50%;animation:pulse 1.5s infinite;display:inline-block;"></span>
-      🎉 Happening Now in Kannur
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(46,204,113,0.95);color:#0f1a0f;font-size:0.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 16px;border-radius:30px;">
+        <span style="width:8px;height:8px;background:#0f1a0f;border-radius:50%;animation:pulse 1.5s infinite;display:inline-block;"></span>
+        🎉 Happening Now in Kannur
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.18);color:#fff;font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:6px 16px;border-radius:30px;border:1px solid rgba(255,255,255,0.25);">
+        📅 1–31 May 2026
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(249,194,60,0.95);color:#3d1a0a;font-size:0.72rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:6px 16px;border-radius:30px;">
+        ⏳ {carnival_status_label}
+      </div>
     </div>
     <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:8px;">
       Kannur Carnival <span style="color:var(--yellow);">2026</span>
     </h2>
     <p style="font-family:'Noto Sans Malayalam',sans-serif;color:var(--yellow);font-size:1.1rem;margin-bottom:18px;">കണ്ണൂർ കാർണിവൽ 2026 — പോലീസ് മൈതാനത്ത്</p>
     <p style="color:rgba(255,255,255,0.92);font-size:1rem;line-height:1.75;margin-bottom:14px;max-width:760px;">
-      <strong style="color:var(--yellow);">Kannur Carnival 2026</strong> is the big city fair currently underway at <strong>Police Maidan (Police Ground), Kannur</strong> — the city's main fairground right in the heart of town. It's a multi-day carnival packed with amusement rides, food stalls, shopping, live entertainment and games for the whole family.
+      <strong style="color:var(--yellow);">Kannur Carnival 2026</strong> is the big city fair running <strong>from 1 May to 31 May 2026</strong> at <strong>Police Maidan (Police Ground), Kannur</strong> — the city's main fairground right in the heart of town. A full month of amusement rides, food stalls, shopping, live entertainment and games for the whole family.
     </p>
     <p style="color:rgba(255,255,255,0.85);font-size:0.95rem;line-height:1.75;margin-bottom:18px;max-width:760px;">
       The carnival is a yearly highlight for people of Kannur and surrounding districts — a perfect evening out for families, students, couples and groups. Follow the official Instagram <a href="https://www.instagram.com/kannurcarnival2026/" target="_blank" rel="noopener" style="color:var(--yellow);font-weight:700;text-decoration:underline;">@kannurcarnival2026</a> for the latest schedule, performer line-ups and daily highlights.
@@ -421,6 +442,7 @@ def generate_html(live_items):
     <!-- INFO PILLS -->
     <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;">
       <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">📍 Police Maidan, Kannur</span>
+      <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">🗓️ 1–31 May 2026</span>
       <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">🕐 Evening &amp; night</span>
       <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">🎢 Rides &amp; games</span>
       <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">🚗 In Kannur city centre</span>
