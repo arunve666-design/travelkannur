@@ -587,3 +587,21 @@ with open('events.html', 'w', encoding='utf-8') as f:
     f.write(page)
 
 print(f"✅ events.html generated at {time_str}")
+
+# ── Bump sitemap.xml lastmod for events.html (and other daily pages) ──────────
+# Without this, Google sees the same lastmod every day and doesn't recrawl.
+try:
+    today_iso = now.strftime('%Y-%m-%d')
+    with open('sitemap.xml', 'r', encoding='utf-8') as f:
+        sitemap = f.read()
+    # Update events.html lastmod to today
+    sitemap = re.sub(
+        r'(<loc>https://travelkannur\.in/events\.html</loc><lastmod>)[^<]+(</lastmod>)',
+        rf'\g<1>{today_iso}\g<2>',
+        sitemap
+    )
+    with open('sitemap.xml', 'w', encoding='utf-8') as f:
+        f.write(sitemap)
+    print(f"✅ sitemap.xml events.html lastmod bumped to {today_iso}")
+except Exception as e:
+    print(f"⚠️  sitemap update skipped: {e}")

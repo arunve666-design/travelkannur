@@ -29,6 +29,6 @@ jobs:
         run: |
           git config --global user.name "TravelKannur Bot"
           git config --global user.email "info@travelkannur.in"
-          git add events.html
+          git add events.html sitemap.xml
           git diff --staged --quiet || git commit -m "Daily events update - $(date +'%d %b %Y')"
           git push

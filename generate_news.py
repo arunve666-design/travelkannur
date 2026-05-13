@@ -254,3 +254,19 @@ with open('news.html', 'w', encoding='utf-8') as f:
     f.write(html_content)
 
 print(f"✅ news.html generated successfully at {time_str}")
+
+# Bump sitemap.xml lastmod for news.html so Google recrawls
+try:
+    today_iso = now.strftime('%Y-%m-%d')
+    with open('sitemap.xml', 'r', encoding='utf-8') as f:
+        sitemap = f.read()
+    sitemap = re.sub(
+        r'(<loc>https://travelkannur\.in/news\.html</loc><lastmod>)[^<]+(</lastmod>)',
+        rf'\g<1>{today_iso}\g<2>',
+        sitemap
+    )
+    with open('sitemap.xml', 'w', encoding='utf-8') as f:
+        f.write(sitemap)
+    print(f"✅ sitemap.xml news.html lastmod bumped to {today_iso}")
+except Exception as e:
+    print(f"⚠️  sitemap update skipped: {e}")
