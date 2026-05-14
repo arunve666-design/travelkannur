@@ -90,28 +90,28 @@
     z-index: 0;
   }
 
-  /* Aerial drone video background */
+  /* Aerial drone video background (full strength, like homepage) */
   .hero-video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 0;
-    opacity: 0.55;
-    pointer-events: none;
-  }
-  /* Overlay so headline + stats stay crisp on top of the video */
-  .hero-video-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(10,10,10,0.55) 0%, rgba(26,5,0,0.45) 50%, rgba(10,10,10,0.85) 100%);
     z-index: 1;
     pointer-events: none;
   }
+  /* Dark gradient on top of the video to keep the Cinzel headline readable */
+  .hero-video-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0.25) 40%, rgba(10,10,10,0.85) 100%),
+      linear-gradient(160deg, rgba(26,5,0,0.35) 0%, rgba(255,69,0,0.18) 60%, rgba(10,10,10,0.55) 100%);
+    z-index: 2;
+    pointer-events: none;
+  }
   /* Lift all hero content above the video + overlay */
-  .hero > *:not(.hero-video):not(.hero-video-overlay)::before,
-  .hero > *:not(.hero-video):not(.hero-video-overlay) { position: relative; z-index: 2; }
+  .hero > *:not(.hero-video):not(.hero-video-overlay) { position: relative; z-index: 3; }
   /* On small screens, drop the video and use just the still image — saves 40 MB on mobile */
   @media (max-width: 768px) {
     .hero-video { display: none; }
