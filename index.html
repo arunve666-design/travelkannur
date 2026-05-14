@@ -444,13 +444,19 @@
     background: rgba(255,255,255,0.07);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 16px;
-    padding: 28px 24px;
-    transition: background 0.3s, transform 0.3s;
+    overflow: hidden;
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
   }
 
-  .food-card:hover { background: rgba(244,101,10,0.2); transform: translateY(-5px); }
+  .food-card:hover { background: rgba(244,101,10,0.18); transform: translateY(-5px); box-shadow: 0 14px 36px rgba(244,101,10,0.2); }
 
-  .food-icon { font-size: 2.5rem; margin-bottom: 16px; display: block; }
+  .food-img { width: 100%; height: 170px; object-fit: cover; display: block; transition: transform 0.5s; }
+  .food-card:hover .food-img { transform: scale(1.06); }
+
+  .food-body { padding: 22px 24px 26px; flex: 1; display: flex; flex-direction: column; }
+  .food-icon { font-size: 1.4rem; margin-bottom: 6px; display: inline-block; }
 
   .food-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--yellow); margin-bottom: 8px; }
   .food-card p { font-size: 0.88rem; color: rgba(255,255,255,0.65); line-height: 1.7; }
@@ -916,28 +922,40 @@
 
   <div class="food-grid">
     <div class="food-card">
-      <span class="food-icon">🦪</span>
-      <h3>Kallummakkaya</h3>
-      <p>Spicy mussel fry — Kannur's most iconic seafood dish, cooked with coconut and Malabar spices.</p>
-      <span class="malayalam" style="color:rgba(255,255,255,0.4)">കല്ലുമ്മക്കായ</span>
+      <img class="food-img" src="https://upload.wikimedia.org/wikipedia/commons/c/c3/KallummakkayaNirachath.jpg" alt="Kallummakkaya nirachath — stuffed mussels, Kannur Kerala">
+      <div class="food-body">
+        <span class="food-icon">🦪</span>
+        <h3>Kallummakkaya</h3>
+        <p>Stuffed mussels (Arikkadukka) — rice batter packed inside mussel shells, steamed and fried. Kannur's most iconic seafood, found at every toddy shop.</p>
+        <span class="malayalam" style="color:rgba(255,255,255,0.4)">കല്ലുമ്മക്കായ</span>
+      </div>
     </div>
     <div class="food-card">
-      <span class="food-icon">🫓</span>
-      <h3>Pathiri</h3>
-      <p>Soft rice flour flatbreads, best enjoyed with spicy chicken or mutton curry — a Malabar classic.</p>
-      <span class="malayalam" style="color:rgba(255,255,255,0.4)">പത്തിരി</span>
+      <img class="food-img" src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Pathiri_%281%29.JPG" alt="Pathiri — soft rice flatbread of Malabar Kerala">
+      <div class="food-body">
+        <span class="food-icon">🫓</span>
+        <h3>Pathiri</h3>
+        <p>Soft rice flour flatbreads — the iconic Malabar bread, eaten with spicy chicken or mutton curry. Light, lacy and unique to North Kerala.</p>
+        <span class="malayalam" style="color:rgba(255,255,255,0.4)">പത്തിരി</span>
+      </div>
     </div>
     <div class="food-card">
-      <span class="food-icon">🍛</span>
-      <h3>Malabar Biryani</h3>
-      <p>Fragrant biryani made with jeerakasala rice — unlike any biryani you've ever tasted.</p>
-      <span class="malayalam" style="color:rgba(255,255,255,0.4)">മലബാർ ബിരിയാണി</span>
+      <img class="food-img" src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Thalassery_biryani_-1.jpg" alt="Thalassery biryani — Kannur Malabar Kerala">
+      <div class="food-body">
+        <span class="food-icon">🍛</span>
+        <h3>Thalassery Biryani</h3>
+        <p>Kannur's pride — fragrant short-grain Khaima rice, layered with masala-marinated meat, fried onions and ghee. The Malabar biryani, dum-cooked.</p>
+        <span class="malayalam" style="color:rgba(255,255,255,0.4)">തലശ്ശേരി ബിരിയാണി</span>
+      </div>
     </div>
     <div class="food-card">
-      <span class="food-icon">🍮</span>
-      <h3>Unnakkai</h3>
-      <p>Deep fried banana dumplings stuffed with sweet coconut filling — a delightful local snack.</p>
-      <span class="malayalam" style="color:rgba(255,255,255,0.4)">ഉന്നക്കായ</span>
+      <img class="food-img" src="https://upload.wikimedia.org/wikipedia/commons/f/f3/Unnakkai_02.jpg" alt="Unnakkai — Kerala banana dumpling stuffed with coconut">
+      <div class="food-body">
+        <span class="food-icon">🍮</span>
+        <h3>Unnakkai</h3>
+        <p>Deep-fried banana dumplings stuffed with sweet coconut, cardamom and cashew. A teatime classic in Kannur Muslim homes — soft, fragrant, addictive.</p>
+        <span class="malayalam" style="color:rgba(255,255,255,0.4)">ഉന്നക്കായ</span>
+      </div>
     </div>
   </div>
 </section>
