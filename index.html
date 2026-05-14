@@ -104,8 +104,42 @@
     position: absolute;
     inset: 0;
     background: url('https://upload.wikimedia.org/wikipedia/commons/d/d9/Muzhappilangad_Drive-in_Beach_2.jpg') center/cover no-repeat;
-    opacity: 0.15;
+    opacity: 0.35;
+    z-index: 0;
   }
+
+  /* DRONE VIDEO BACKGROUND */
+  .hero-video-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero-video-wrap iframe {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    /* Cover entire hero — 16:9 always larger than viewport */
+    width: max(100vw, 177.78vh);
+    height: max(56.25vw, 100vh);
+    border: 0;
+    pointer-events: none;
+  }
+  /* Dark gradient overlay so text stays readable on top of video */
+  .hero-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, rgba(26,10,0,0.65) 0%, rgba(122,59,16,0.55) 50%, rgba(244,101,10,0.55) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  /* On mobile, hide the iframe (autoplay restrictions + data) — keep the static image */
+  @media (max-width: 768px) {
+    .hero-video-wrap { display: none; }
+  }
+  /* Lift all hero content above the video + overlay */
+  .hero > *:not(.hero-video-wrap):not(.hero-video-overlay) { z-index: 2; }
 
   .hero-badge {
     background: var(--yellow);
@@ -119,6 +153,7 @@
     margin-bottom: 24px;
     animation: fadeUp 0.8s ease both;
     position: relative;
+    z-index: 2;
   }
 
   .hero h1 {
@@ -668,6 +703,17 @@
 
 <!-- HERO -->
 <section class="hero">
+  <!-- Drone video background (desktop only) -->
+  <div class="hero-video-wrap" aria-hidden="true">
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/IQ1BpApZSxQ?autoplay=1&mute=1&loop=1&playlist=IQ1BpApZSxQ&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&disablekb=1&fs=0&playsinline=1"
+      title="Muzhappilangad Drive-in Beach Kannur 4K drone view"
+      allow="autoplay; encrypted-media"
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+  <div class="hero-video-overlay" aria-hidden="true"></div>
+
   <div class="hero-badge">Kerala's Northern Gem</div>
   <h1>Welcome to<br><span>Kannur</span></h1>
   <p class="hero-sub">Where ancient traditions meet golden shores</p>
