@@ -86,7 +86,7 @@
     position: absolute;
     inset: 0;
     background: url('theyyam1.jpg') center/cover no-repeat;
-    opacity: 0.35;
+    opacity: 0.7;
     z-index: 0;
   }
 
@@ -100,13 +100,11 @@
     z-index: 1;
     pointer-events: none;
   }
-  /* Dark gradient on top of the video to keep the Cinzel headline readable */
+  /* Lighter tinted overlay so the drone footage stays visible */
   .hero-video-overlay {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(180deg, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0.25) 40%, rgba(10,10,10,0.85) 100%),
-      linear-gradient(160deg, rgba(26,5,0,0.35) 0%, rgba(255,69,0,0.18) 60%, rgba(10,10,10,0.55) 100%);
+    background: linear-gradient(160deg, rgba(26,5,0,0.55) 0%, rgba(122,30,0,0.35) 50%, rgba(10,10,10,0.55) 100%);
     z-index: 2;
     pointer-events: none;
   }
@@ -521,10 +519,23 @@
 
 <!-- HERO -->
 <section class="hero">
-  <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="theyyam1.jpg" aria-hidden="true">
+  <video id="heroBgVideo" class="hero-video" autoplay muted loop playsinline preload="auto" poster="theyyam1.jpg" aria-hidden="true">
     <source src="theyyam-bg.mp4" type="video/mp4">
   </video>
   <div class="hero-video-overlay" aria-hidden="true"></div>
+  <script>
+    (function(){
+      var v = document.getElementById('heroBgVideo');
+      if (!v) return;
+      // Some browsers block autoplay even when muted — force-attempt play
+      var tryPlay = function(){ var p = v.play(); if (p && p.catch) p.catch(function(){}); };
+      v.addEventListener('loadedmetadata', tryPlay);
+      v.addEventListener('canplay', tryPlay);
+      document.addEventListener('click', tryPlay, { once: true });
+      document.addEventListener('touchstart', tryPlay, { once: true });
+      tryPlay();
+    })();
+  </script>
   <p class="hero-eyebrow">🔥 The Ancient Ritual Art of North Kerala</p>
   <h1><span>Theyyam</span>Calendar 2025–26</h1>
   <p class="hero-sub">Theyyam is one of humanity's oldest living ritual traditions — a breathtaking fusion of dance, music, colour and devotion performed across hundreds of temples in Kannur district every year.</p>
