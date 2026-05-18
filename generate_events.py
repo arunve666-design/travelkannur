@@ -449,23 +449,38 @@ def generate_html(live_items):
       <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">👨‍👩‍👧 Family-friendly</span>
     </div>
 
-    <!-- YOUTUBE VIDEO LINK (the original video has embedding disabled, so we link out) -->
-    <div style="margin-bottom:24px;">
-      <a href="https://www.youtube.com/watch?v=5cX1sgmkurM" target="_blank" rel="noopener" style="display:block;text-decoration:none;position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,0.4);background:#000;transition:transform 0.25s,box-shadow 0.25s;" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 18px 48px rgba(244,101,10,0.45)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 12px 36px rgba(0,0,0,0.4)'">
-        <img src="https://img.youtube.com/vi/5cX1sgmkurM/maxresdefault.jpg" alt="Kannur Carnival 2026 — Police Maidan, Kannur" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.src='https://img.youtube.com/vi/5cX1sgmkurM/hqdefault.jpg'">
-        <!-- Play button -->
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:84px;height:84px;border-radius:50%;background:rgba(255,0,0,0.92);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
-          <div style="width:0;height:0;border-left:24px solid #fff;border-top:16px solid transparent;border-bottom:16px solid transparent;margin-left:6px;"></div>
+    <!-- YOUTUBE VIDEOS — 2 col on desktop, stacked on mobile -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px;">
+
+      <!-- Video 1: embed-disabled by uploader → clickable thumbnail card -->
+      <div>
+        <a href="https://www.youtube.com/watch?v=5cX1sgmkurM" target="_blank" rel="noopener" style="display:block;text-decoration:none;position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,0.4);background:#000;transition:transform 0.25s,box-shadow 0.25s;" onmouseover="this.style.transform='scale(1.01)';this.style.boxShadow='0 18px 48px rgba(244,101,10,0.45)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 12px 36px rgba(0,0,0,0.4)'">
+          <img src="https://img.youtube.com/vi/5cX1sgmkurM/maxresdefault.jpg" alt="Kannur Carnival 2026 — Police Maidan, Kannur" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.src='https://img.youtube.com/vi/5cX1sgmkurM/hqdefault.jpg'">
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:74px;height:74px;border-radius:50%;background:rgba(255,0,0,0.92);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+            <div style="width:0;height:0;border-left:22px solid #fff;border-top:14px solid transparent;border-bottom:14px solid transparent;margin-left:5px;"></div>
+          </div>
+          <div style="position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.78);color:#fff;font-size:0.72rem;font-weight:700;padding:5px 10px;border-radius:6px;display:flex;align-items:center;gap:6px;">
+            <svg width="13" height="9" viewBox="0 0 24 17" fill="#FF0000" xmlns="http://www.w3.org/2000/svg"><path d="M23.5 2.6C23.2 1.5 22.4 0.7 21.3 0.4 19.4 0 12 0 12 0S4.6 0 2.7 0.4C1.6 0.7 0.8 1.5 0.5 2.6 0 4.5 0 8.5 0 8.5s0 4 0.5 5.9c0.3 1.1 1.1 1.9 2.2 2.2C4.6 17 12 17 12 17s7.4 0 9.3-0.4c1.1-0.3 1.9-1.1 2.2-2.2C24 12.5 24 8.5 24 8.5s0-4-0.5-5.9zM9.6 12.1V4.9l6.3 3.6-6.3 3.6z"/></svg>
+            Watch on YouTube
+          </div>
+        </a>
+        <p style="color:rgba(255,255,255,0.55);font-size:0.72rem;margin-top:6px;text-align:center;font-style:italic;">▶️ Kannur Carnival 2026 — clip 1</p>
+      </div>
+
+      <!-- Video 2: inline embed (oembed reported playable) — falls back gracefully if blocked -->
+      <div>
+        <div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,0.4);background:#000;">
+          <iframe src="https://www.youtube-nocookie.com/embed/YPmu6NjhsIg?rel=0&amp;modestbranding=1"
+                  title="Kannur Carnival 2026 — News Tomorrow Kannur"
+                  loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                  style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
         </div>
-        <!-- Watch on YouTube ribbon -->
-        <div style="position:absolute;bottom:14px;left:14px;background:rgba(0,0,0,0.78);color:#fff;font-size:0.78rem;font-weight:700;padding:6px 12px;border-radius:6px;display:flex;align-items:center;gap:6px;">
-          <svg width="14" height="10" viewBox="0 0 24 17" fill="#FF0000" xmlns="http://www.w3.org/2000/svg"><path d="M23.5 2.6C23.2 1.5 22.4 0.7 21.3 0.4 19.4 0 12 0 12 0S4.6 0 2.7 0.4C1.6 0.7 0.8 1.5 0.5 2.6 0 4.5 0 8.5 0 8.5s0 4 0.5 5.9c0.3 1.1 1.1 1.9 2.2 2.2C4.6 17 12 17 12 17s7.4 0 9.3-0.4c1.1-0.3 1.9-1.1 2.2-2.2C24 12.5 24 8.5 24 8.5s0-4-0.5-5.9zM9.6 12.1V4.9l6.3 3.6-6.3 3.6z"/></svg>
-          Watch on YouTube
-        </div>
-      </a>
-      <p style="color:rgba(255,255,255,0.55);font-size:0.75rem;margin-top:8px;text-align:center;font-style:italic;">
-        ▶️ Kannur Carnival 2026 at Police Maidan · video courtesy of the original creator on YouTube
-      </p>
+        <p style="color:rgba(255,255,255,0.55);font-size:0.72rem;margin-top:6px;text-align:center;font-style:italic;">▶️ Kannur Carnival 2026 — News Tomorrow Kannur</p>
+      </div>
+
     </div>
 
     <!-- HIGHLIGHT TILES -->
