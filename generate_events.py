@@ -449,6 +449,22 @@ def generate_html(live_items):
       <span style="background:rgba(0,0,0,0.35);color:#fff;font-size:0.82rem;padding:8px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.15);">👨‍👩‍👧 Family-friendly</span>
     </div>
 
+    <!-- YOUTUBE VIDEO -->
+    <div style="margin-bottom:24px;">
+      <div style="position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,0.4);background:#000;">
+        <iframe src="https://www.youtube-nocookie.com/embed/5cX1sgmkurM?rel=0&amp;modestbranding=1"
+                title="Kannur Carnival 2026 — Police Maidan, Kannur"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                style="position:absolute;inset:0;width:100%;height:100%;border:0;"></iframe>
+      </div>
+      <p style="color:rgba(255,255,255,0.55);font-size:0.75rem;margin-top:8px;text-align:center;font-style:italic;">
+        ▶️ Watch: Kannur Carnival 2026 at Police Maidan · video courtesy of the original creator on YouTube
+      </p>
+    </div>
+
     <!-- HIGHLIGHT TILES -->
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:24px;">
       <div style="background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:18px 14px;text-align:center;">
