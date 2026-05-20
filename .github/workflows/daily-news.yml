@@ -1,14 +1,20 @@
-name: Daily Kannur News Update
+# Daily Kannur News Update — DISABLED while AdSense review is pending.
+# News.html aggregated headlines from Google News RSS, which AdSense
+# treats as scraped/third-party content. The page is currently hidden
+# (noindex + no nav link). Re-enable later by uncommenting the cron
+# below and re-adding the page to the sitemap.
+
+name: Daily Kannur News Update (disabled)
 
 on:
-  schedule:
-    # 8:00 AM IST = 2:30 AM UTC
-    - cron: '30 2 * * *'
-  workflow_dispatch:
+  # schedule:
+  #   - cron: '30 2 * * *'   # 8:00 AM IST
+  workflow_dispatch:           # manual-run only while disabled
 
 jobs:
   update-news:
     runs-on: ubuntu-latest
+    if: ${{ false }}           # hard block accidental manual runs too
 
     steps:
       - name: Checkout repository

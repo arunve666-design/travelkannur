@@ -1,7 +1,4 @@
-import feedparser
-import requests
 from datetime import datetime, timezone, timedelta
-import html
 import re
 
 # ── Timezone ──────────────────────────────────────────────────────────────────
@@ -39,36 +36,7 @@ AREAS = [
     {'name': 'Thrissur',   'km': 145, 'emoji': '🗺️', 'state': 'Kerala'},
 ]
 
-# ── Google News RSS feeds ─────────────────────────────────────────────────────
-NEWS_FEEDS = [
-    {'url': 'https://news.google.com/rss/search?q=kannur+festival+event+today&hl=en-IN&gl=IN&ceid=IN:en',          'area': 'Kannur',     'km': 0},
-    {'url': 'https://news.google.com/rss/search?q=kannur+theyyam+kaliyattam+utsav&hl=en-IN&gl=IN&ceid=IN:en',     'area': 'Kannur',     'km': 0},
-    {'url': 'https://news.google.com/rss/search?q=thalassery+festival+event&hl=en-IN&gl=IN&ceid=IN:en',           'area': 'Thalassery', 'km': 20},
-    {'url': 'https://news.google.com/rss/search?q=kasaragod+event+festival+today&hl=en-IN&gl=IN&ceid=IN:en',      'area': 'Kasaragod',  'km': 55},
-    {'url': 'https://news.google.com/rss/search?q=kozhikode+calicut+event+festival+today&hl=en-IN&gl=IN&ceid=IN:en','area': 'Kozhikode',  'km': 100},
-    {'url': 'https://news.google.com/rss/search?q=wayanad+festival+event+today&hl=en-IN&gl=IN&ceid=IN:en',        'area': 'Wayanad',    'km': 105},
-    {'url': 'https://news.google.com/rss/search?q=mangalore+event+festival+today&hl=en-IN&gl=IN&ceid=IN:en',      'area': 'Mangalore',  'km': 110},
-    {'url': 'https://news.google.com/rss/search?q=kerala+festival+event+mela+today&hl=en-IN&gl=IN&ceid=IN:en',    'area': 'Kerala',     'km': 0},
-    {'url': 'https://news.google.com/rss/search?q=north+kerala+malabar+festival+event&hl=en-IN&gl=IN&ceid=IN:en', 'area': 'Kannur',     'km': 0},
-]
-
-# ── Keywords that suggest an event is happening ───────────────────────────────
-EVENT_KEYWORDS = [
-    'festival', 'event', 'concert', 'exhibition', 'performance', 'show',
-    'utsav', 'utsavam', 'mahotsavam', 'theyyam', 'thira', 'mela',
-    'inauguration', 'celebration', 'programme', 'program', 'function',
-    'ceremony', 'tournament', 'match', 'competition', 'expo', 'fair',
-    'carnival', 'parade', 'procession', 'marathon', 'rally', 'yatra',
-    'kaliyattam', 'pooram', 'ulsavam', 'seminar', 'workshop', 'conference',
-    'inaugur', 'launch', 'meet', 'gathering', 'camp',
-]
-
-# Keywords that suggest it's happening NOW / TODAY
-RECENCY_KEYWORDS = [
-    'today', 'tonight', 'this evening', 'this morning', 'now on',
-    'begins today', 'starts today', 'opening today', 'held today',
-    'this weekend', 'this week', date_short, weekday,
-]
+# ── (Events are now hand-curated by the editorial team — RSS scraping removed) ──
 
 # ── Always-on / recurring attractions ────────────────────────────────────────
 RECURRING = [
@@ -206,92 +174,12 @@ RECURRING = [
     },
 ]
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
-def clean(text):
-    text = re.sub(r'<[^>]+>', '', text or '')
-    return html.unescape(text).strip()
-
-def is_event_article(title, desc):
-    t = (title + ' ' + desc).lower()
-    return any(k in t for k in EVENT_KEYWORDS)
-
-def is_recent(entry):
-    """True if article was published in the last 48 hours."""
-    try:
-        pub = entry.get('published_parsed') or entry.get('updated_parsed')
-        if pub:
-            pub_dt = datetime(*pub[:6], tzinfo=timezone.utc)
-            age = now.astimezone(timezone.utc) - pub_dt
-            return age.total_seconds() < 172800  # 48 hours
-    except Exception:
-        pass
-    # Fallback: check for recency keywords in title/description
-    t = (entry.get('title', '') + ' ' + entry.get('summary', '')).lower()
-    return any(k in t for k in RECENCY_KEYWORDS)
-
-def fetch_feed(url):
-    try:
-        r = requests.get(url, timeout=15, headers={'User-Agent': 'Mozilla/5.0'}, verify=False)
-        return feedparser.parse(r.text)
-    except Exception:
-        return feedparser.parse(url)
-
-# ── Fetch live event news ─────────────────────────────────────────────────────
-def fetch_live_events():
-    items = []
-    seen  = set()
-
-    for feed_info in NEWS_FEEDS:
-        try:
-            feed = fetch_feed(feed_info['url'])
-            for entry in feed.entries[:15]:
-                title = clean(entry.get('title', ''))
-                desc  = clean(entry.get('summary', entry.get('description', '')))
-                link  = entry.get('link', '#')
-
-                if not title or title in seen:
-                    continue
-                if not is_event_article(title, desc):
-                    continue
-                if not is_recent(entry):
-                    continue
-
-                seen.add(title)
-                items.append({
-                    'title':  title,
-                    'desc':   desc[:220] + '...' if len(desc) > 220 else desc,
-                    'link':   link,
-                    'area':   feed_info['area'],
-                    'km':     feed_info['km'],
-                    'source': feed.feed.get('title', 'News'),
-                })
-        except Exception as e:
-            print(f"Error fetching {feed_info['area']}: {e}")
-
-    # Sort by distance (Kannur first)
-    items.sort(key=lambda x: x['km'])
-    return items
-
 # ── Render helpers ────────────────────────────────────────────────────────────
+
 def km_badge(km):
     if km == 0:
         return '<span style="background:rgba(46,204,113,0.2);color:#2ecc71;font-size:0.65rem;padding:2px 8px;border-radius:10px;font-weight:700;">IN KANNUR</span>'
     return f'<span style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);font-size:0.65rem;padding:2px 8px;border-radius:10px;">{km} km away</span>'
-
-def render_live_card(item):
-    badge = km_badge(item['km'])
-    return f'''
-    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:18px 20px;margin-bottom:14px;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(249,194,60,0.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)'">
-      <a href="{item['link']}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
-          <span style="font-size:0.68rem;color:var(--yellow);font-weight:700;letter-spacing:1px;text-transform:uppercase;">📌 {item['area']}</span>
-          {badge}
-        </div>
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.05rem;color:#fff;margin-bottom:8px;line-height:1.4;">{item['title']}</h3>
-        <p style="font-size:0.85rem;color:rgba(255,255,255,0.5);line-height:1.6;margin-bottom:8px;">{item['desc']}</p>
-        <span style="font-size:0.75rem;color:var(--orange);">Read more →</span>
-      </a>
-    </div>'''
 
 def render_recurring_card(ev):
     badge  = km_badge(ev['km'])
@@ -314,36 +202,31 @@ def render_recurring_card(ev):
     </div>'''
 
 # ── Generate full HTML ────────────────────────────────────────────────────────
-def generate_html(live_items):
+def generate_html():
     weekend_emoji = "🎉" if is_weekend else "📅"
     weekend_label = "Weekend!" if is_weekend else "Weekday"
-
-    live_html = ''.join(render_live_card(i) for i in live_items) if live_items else '''
-    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:32px;text-align:center;color:rgba(255,255,255,0.4);">
-      <p style="font-size:1.1rem;margin-bottom:10px;">🔍 No specific events found for today in the news feeds.</p>
-      <p style="font-size:0.9rem;">Check below for things you can always do in and around Kannur!</p>
-    </div>'''
 
     highlights = [ev for ev in RECURRING if ev['star']]
     others     = [ev for ev in RECURRING if not ev['star']]
     recurring_html = ''.join(render_recurring_card(ev) for ev in highlights + others)
 
-    # +1 for the featured Kannur Carnival event while it is running (1–31 May 2026)
+    # Hero stat counters — featured carnival (1 while live) + 4 monthly highlights
     featured_count = 1 if carnival_active else 0
-    kannur_count  = sum(1 for i in live_items if i['km'] == 0) + featured_count
-    nearby_count  = sum(1 for i in live_items if i['km'] > 0)
-    total_count   = len(live_items) + featured_count
+    monthly_highlights = 4  # Carnival, Theyyam finale, mango/jackfruit season, drive-in beach
+    kannur_count  = featured_count + monthly_highlights
+    nearby_count  = 0
+    total_count   = featured_count + monthly_highlights
 
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <link rel="canonical" href="https://travelkannur.in/events.html">
-<script type="application/ld+json">{{"@context":"https://schema.org","@type":"WebPage","name":"Events in Kannur Today","url":"https://travelkannur.in/events.html","description":"What is happening in Kannur today — festivals, cultural events and activities within 150 km of Kannur, updated every day.","about":{{"@type":"TouristDestination","name":"Kannur","address":{{"@type":"PostalAddress","addressLocality":"Kannur","addressRegion":"Kerala","addressCountry":"IN"}}}}}}</script>
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"WebPage","name":"Events in Kannur","url":"https://travelkannur.in/events.html","description":"Editor-curated festivals, season highlights and ongoing happenings in Kannur, Kerala.","about":{{"@type":"TouristDestination","name":"Kannur","address":{{"@type":"PostalAddress","addressLocality":"Kannur","addressRegion":"Kerala","addressCountry":"IN"}}}}}}</script>
 <script type="application/ld+json">{{"@context":"https://schema.org","@type":"Festival","name":"Kannur Carnival 2026","alternateName":["Kannur Carnival","Kannur Fair"],"description":"Month-long carnival fair at Police Maidan, Kannur, running 1–31 May 2026 — amusement rides, food stalls, shopping bazaars, live entertainment, games and family activities.","startDate":"2026-05-01T17:00+05:30","endDate":"2026-05-31T23:00+05:30","location":{{"@type":"Place","name":"Police Maidan (Police Ground), Kannur","address":{{"@type":"PostalAddress","addressLocality":"Kannur","addressRegion":"Kerala","postalCode":"670001","addressCountry":"IN"}},"geo":{{"@type":"GeoCoordinates","latitude":11.8689,"longitude":75.3556}}}},"eventStatus":"https://schema.org/EventScheduled","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","url":"https://travelkannur.in/events.html#kannur-carnival","sameAs":"https://www.instagram.com/kannurcarnival2026/"}}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kannur Carnival 2026 at Police Maidan &amp; Events in Kannur Today — {today_str} | Travel Kannur</title>
-<meta name="description" content="Kannur Carnival 2026 runs 1–31 May at Police Maidan, Kannur — rides, food stalls, shopping, live entertainment. Plus all events &amp; festivals in Kannur and within 150 km, updated daily ({today_str}).">
+<meta name="description" content="Kannur Carnival 2026 runs 1–31 May at Police Maidan, Kannur — rides, food stalls, shopping, live entertainment. Editor-curated festivals and season highlights in Kannur ({today_str}).">
 <meta name="keywords" content="Kannur Carnival, Kannur Carnival 2026, Kannur Carnival Police Maidan, Police Maidan Kannur, Kannur fair, Kannur city events, Kannur events today, things to do Kannur, Kerala events today, Kannur festival today, Malabar events, Kannur carnival Instagram">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6684797590545478" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Raleway:wght@300;400;600;700&family=Noto+Sans+Malayalam:wght@400;700&display=swap" rel="stylesheet">
@@ -366,7 +249,7 @@ def generate_html(live_items):
   <a href="index.html" class="nav-logo">Travel<span>Kannur</span></a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
-    <li><a href="news.html">News</a></li>
+    <li><a href="about.html">About</a></li>
     <li><a href="theyyam.html">Theyyam</a></li>
     <li><a href="beaches.html">Beaches</a></li>
   </ul>
@@ -382,35 +265,25 @@ def generate_html(live_items):
     What's On in <span style="color:var(--yellow);">Kannur</span> Today
   </h1>
   <p style="color:rgba(255,255,255,0.55);font-size:1rem;max-width:540px;margin:0 auto 10px;line-height:1.7;">
-    {today_str} — Events, festivals &amp; activities in Kannur and within 150 km
+    {today_str} — Editor's pick of festivals, season highlights and ongoing happenings in Kannur
   </p>
-  <p style="font-family:'Noto Sans Malayalam',sans-serif;color:var(--yellow);font-size:1rem;">കണ്ണൂരിൽ ഇന്ന് നടക്കുന്ന ഇവന്‍റുകൾ</p>
+  <p style="font-family:'Noto Sans Malayalam',sans-serif;color:var(--yellow);font-size:1rem;">കണ്ണൂരിൽ ഇപ്പോൾ നടക്കുന്ന ഇവന്‍റുകൾ</p>
 
   <!-- Stats row -->
   <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;margin-top:36px;">
     <div style="text-align:center;">
       <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--yellow);font-weight:900;">{total_count}</div>
-      <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">Live Events Found</div>
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">Highlights this Month</div>
     </div>
     <div style="text-align:center;">
       <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--yellow);font-weight:900;">{kannur_count}</div>
-      <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">In Kannur</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--yellow);font-weight:900;">{nearby_count}</div>
-      <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">Nearby (&lt;150 km)</div>
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">In &amp; Around Kannur</div>
     </div>
     <div style="text-align:center;">
       <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--yellow);font-weight:900;">{weekend_emoji}</div>
       <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-top:4px;">{weekend_label}</div>
     </div>
   </div>
-</div>
-
-<!-- AD -->
-<div style="max-width:1100px;margin:24px auto;padding:0 5%;">
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6684797590545478" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
 </div>
 
 <!-- FEATURED EVENT: KANNUR CARNIVAL -->
@@ -553,22 +426,56 @@ def generate_html(live_items):
 <!-- MAIN GRID -->
 <div style="max-width:1100px;margin:0 auto;padding:40px 5%;display:grid;grid-template-columns:3fr 2fr;gap:36px;" class="grid-2col">
 
-  <!-- LEFT: LIVE EVENTS -->
+  <!-- LEFT: WHAT'S ON THIS MONTH (hand-curated by Travel Kannur editors) -->
   <div>
     <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--yellow);margin-bottom:6px;">
-      📰 In the News Today
+      🗓️ This Month in Kannur
     </h2>
-    <p style="font-size:0.85rem;color:rgba(255,255,255,0.35);margin-bottom:24px;">Events &amp; festivals found in today's news — Kannur &amp; within 150 km</p>
-    {live_html}
+    <p style="font-size:0.85rem;color:rgba(255,255,255,0.35);margin-bottom:24px;">Hand-picked happenings, season highlights and ongoing festivities in Kannur — curated by our editors.</p>
 
-    <!-- AD mid -->
-    <ins class="adsbygoogle" style="display:block;margin:24px 0;" data-ad-client="ca-pub-6684797590545478" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:22px 24px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:1.3rem;">🎪</span>
+        <span style="font-size:0.72rem;color:var(--orange);font-weight:700;letter-spacing:1px;text-transform:uppercase;">Top Pick of the Month</span>
+      </div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.15rem;color:#fff;margin-bottom:6px;">Kannur Carnival at Police Maidan</h3>
+      <p style="font-size:0.88rem;color:rgba(255,255,255,0.6);line-height:1.7;">The biggest city fair of the year is on right now — rides, food stalls, live shows, kids' zone. See the featured section above for full details.</p>
+      <a href="#kannur-carnival" style="display:inline-block;margin-top:10px;color:var(--yellow);font-size:0.82rem;font-weight:700;text-decoration:none;">↑ Jump to details</a>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:22px 24px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:1.3rem;">🔥</span>
+        <span style="font-size:0.72rem;color:var(--orange);font-weight:700;letter-spacing:1px;text-transform:uppercase;">Theyyam Season Finale</span>
+      </div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.15rem;color:#fff;margin-bottom:6px;">Closing Theyyams across Kannur</h3>
+      <p style="font-size:0.88rem;color:rgba(255,255,255,0.6);line-height:1.7;">May is the last chance to catch Theyyam before the monsoon. Maaniyoor Kizhakkekaav (23–25 May) closes the season this year. Our calendar has the full list.</p>
+      <a href="theyyam.html" style="display:inline-block;margin-top:10px;color:var(--yellow);font-size:0.82rem;font-weight:700;text-decoration:none;">→ Theyyam calendar</a>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:22px 24px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:1.3rem;">🥭</span>
+        <span style="font-size:0.72rem;color:var(--orange);font-weight:700;letter-spacing:1px;text-transform:uppercase;">In Season</span>
+      </div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.15rem;color:#fff;margin-bottom:6px;">Malabar Mangoes &amp; Jackfruit</h3>
+      <p style="font-size:0.88rem;color:rgba(255,255,255,0.6);line-height:1.7;">May is peak season for North Kerala mangoes (Naattu Maanga, Kilichundan) and jackfruit. Any roadside stall in Kannur, Thalassery or Payyanur will have fresh fruit at unbeatable prices.</p>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:22px 24px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:1.3rem;">🏖️</span>
+        <span style="font-size:0.72rem;color:var(--orange);font-weight:700;letter-spacing:1px;text-transform:uppercase;">Drive-In Beach Season</span>
+      </div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.15rem;color:#fff;margin-bottom:6px;">Last chance before the monsoon</h3>
+      <p style="font-size:0.88rem;color:rgba(255,255,255,0.6);line-height:1.7;">Muzhappilangad Drive-in Beach is at its best now — firm sand, calm sea. From June onwards the monsoon makes driving on the beach unsafe and the strip is usually closed to vehicles.</p>
+      <a href="beaches.html" style="display:inline-block;margin-top:10px;color:var(--yellow);font-size:0.82rem;font-weight:700;text-decoration:none;">→ Beach guide</a>
+    </div>
 
     <!-- DISTANCE NOTE -->
-    <div style="background:rgba(249,194,60,0.05);border:1px solid rgba(249,194,60,0.15);border-radius:12px;padding:16px 20px;margin-top:8px;">
+    <div style="background:rgba(249,194,60,0.05);border:1px solid rgba(249,194,60,0.15);border-radius:12px;padding:16px 20px;margin-top:18px;">
       <p style="font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.7;">
-        <strong style="color:var(--yellow);">🗺️ Coverage area:</strong> Kannur district · Thalassery · Payyanur · Kasaragod (~55 km) · Kozhikode (~100 km) · Wayanad (~105 km) · Mangalore (~110 km) · Coorg (~130 km) · Thrissur (~145 km)
+        <strong style="color:var(--yellow);">📝 Editor's note:</strong> Highlights on this page are hand-picked by our small editorial team. Have a festival, exhibition or community event we should feature? <a href="contact.html" style="color:var(--yellow);">Get in touch</a>.
       </p>
     </div>
   </div>
@@ -580,10 +487,6 @@ def generate_html(live_items):
     </h2>
     <p style="font-size:0.85rem;color:rgba(255,255,255,0.35);margin-bottom:24px;">Things you can do today regardless of the date</p>
     {recurring_html}
-
-    <!-- SIDEBAR AD -->
-    <ins class="adsbygoogle" style="display:block;margin-top:20px;" data-ad-client="ca-pub-6684797590545478" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({{}});</script>
   </div>
 </div>
 
@@ -602,8 +505,8 @@ def generate_html(live_items):
 </div>
 
 <footer style="background:#080808;color:rgba(255,255,255,0.3);text-align:center;padding:32px 5%;font-size:0.85rem;border-top:1px solid rgba(255,255,255,0.05);">
-  <p>© 2026 <span style="color:var(--yellow);">TravelKannur.in</span> — <a href="index.html" style="color:var(--yellow);">← Home</a> · <a href="news.html" style="color:var(--yellow);">News</a> · <a href="theyyam.html" style="color:var(--yellow);">Theyyam</a></p>
-  <p style="margin-top:6px;font-size:0.75rem;">Auto-updated daily. Events sourced from Google News RSS feeds. Always verify event details with the organiser before visiting.</p>
+  <p>© 2026 <span style="color:var(--yellow);">TravelKannur.in</span> — <a href="index.html" style="color:var(--yellow);">Home</a> · <a href="theyyam.html" style="color:var(--yellow);">Theyyam</a> · <a href="about.html" style="color:var(--yellow);">About</a> · <a href="contact.html" style="color:var(--yellow);">Contact</a> · <a href="privacy.html" style="color:var(--yellow);">Privacy</a> · <a href="terms.html" style="color:var(--yellow);">Terms</a> · <a href="disclaimer.html" style="color:var(--yellow);">Disclaimer</a></p>
+  <p style="margin-top:6px;font-size:0.75rem;">Highlights on this page are curated by the Travel Kannur editorial team. Always verify event details with the organiser before visiting.</p>
 </footer>
 
 <style>@keyframes pulse{{0%,100%{{opacity:1;transform:scale(1);}}50%{{opacity:0.5;transform:scale(1.4);}}}}</style>
@@ -612,11 +515,9 @@ def generate_html(live_items):
 </html>'''
 
 # ── Main ──────────────────────────────────────────────────────────────────────
-print(f"Fetching today's events for {today_str}...")
-live_items = fetch_live_events()
-print(f"Found {len(live_items)} live event articles")
+print(f"Rendering hand-curated events page for {today_str}...")
 
-page = generate_html(live_items)
+page = generate_html()
 with open('events.html', 'w', encoding='utf-8') as f:
     f.write(page)
 

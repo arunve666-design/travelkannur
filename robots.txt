@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /news.html
+Disallow: /election_news.html
 
 Sitemap: https://travelkannur.in/sitemap.xml
