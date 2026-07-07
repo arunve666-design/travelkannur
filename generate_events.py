@@ -1,5 +1,9 @@
 from datetime import datetime, timezone, timedelta
 import re
+import html as html_mod
+import urllib.request
+import urllib.error
+import xml.etree.ElementTree as ET
 
 # ── Timezone ──────────────────────────────────────────────────────────────────
 IST = timezone(timedelta(hours=5, minutes=30))
@@ -181,6 +185,48 @@ def km_badge(km):
         return '<span style="background:rgba(46,204,113,0.2);color:#2ecc71;font-size:0.65rem;padding:2px 8px;border-radius:10px;font-weight:700;">IN KANNUR</span>'
     return f'<span style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);font-size:0.65rem;padding:2px 8px;border-radius:10px;">{km} km away</span>'
 
+# ── News mentions (headlines only, links out — no republished text) ──────────
+NEWS_FEEDS = [
+    'https://news.google.com/rss/search?q=kannur&hl=en-IN&gl=IN&ceid=IN:en',
+    'https://news.google.com/rss/search?q=thalassery+OR+payyanur&hl=en-IN&gl=IN&ceid=IN:en',
+]
+
+def _clean(t):
+    return html_mod.unescape(re.sub(r'<[^>]+>', '', t or '')).strip()
+
+def fetch_news_mentions(limit=8):
+    """Fetch up to `limit` recent Kannur-related headlines. Returns [] on any failure."""
+    items = []
+    seen = set()
+    for url in NEWS_FEEDS:
+        try:
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 TravelKannur/1.0'})
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                root = ET.fromstring(resp.read())
+        except Exception as e:
+            print(f"⚠️  RSS fetch failed for {url}: {e}")
+            continue
+
+        for item in root.iter('item'):
+            title = _clean((item.findtext('title') or ''))
+            link  = (item.findtext('link') or '#').strip()
+            source_el = item.find('source')
+            source = _clean(source_el.text) if source_el is not None else 'Google News'
+            if not title or title in seen:
+                continue
+            seen.add(title)
+            items.append({'title': title, 'link': link, 'source': source})
+            if len(items) >= limit:
+                return items
+    return items
+
+def render_news_mention(it):
+    return f'''
+    <a href="{it['link']}" target="_blank" rel="noopener nofollow" style="display:block;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:12px 14px;margin-bottom:8px;text-decoration:none;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(249,194,60,0.4)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.07)'">
+      <div style="font-size:0.62rem;color:rgba(255,255,255,0.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">📰 {html_mod.escape(it['source'])[:40]}</div>
+      <div style="font-size:0.85rem;color:rgba(255,255,255,0.85);line-height:1.4;">{html_mod.escape(it['title'])[:140]}</div>
+    </a>'''
+
 def render_recurring_card(ev):
     badge  = km_badge(ev['km'])
     star   = '<span style="font-size:0.65rem;background:rgba(249,194,60,0.2);color:var(--yellow);padding:2px 8px;border-radius:10px;font-weight:700;margin-left:6px;">⭐ Highlight</span>' if ev['star'] else ''
@@ -205,6 +251,15 @@ def render_recurring_card(ev):
 def generate_html():
     weekend_emoji = "🎉" if is_weekend else "📅"
     weekend_label = "Weekend!" if is_weekend else "Weekday"
+
+    # Compact "news mentions" widget — headlines only, outbound links, clearly
+    # attributed to Google News. This is NOT scraped/republished content, it's
+    # a link roundup (same pattern used by news aggregator sidebars everywhere).
+    news_items = fetch_news_mentions(limit=8)
+    if news_items:
+        news_html = ''.join(render_news_mention(i) for i in news_items)
+    else:
+        news_html = '<p style="font-size:0.82rem;color:rgba(255,255,255,0.35);font-style:italic;text-align:center;padding:16px 8px;">Live headline feed will refresh on next update.</p>'
 
     highlights = [ev for ev in RECURRING if ev['star']]
     others     = [ev for ev in RECURRING if not ev['star']]
@@ -487,6 +542,26 @@ def generate_html():
     </h2>
     <p style="font-size:0.85rem;color:rgba(255,255,255,0.35);margin-bottom:24px;">Things you can do today regardless of the date</p>
     {recurring_html}
+
+    <!-- NEWS MENTIONS · headlines only, outbound links to Google News -->
+    <div style="margin-top:36px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--yellow);margin-bottom:4px;">
+        📰 Kannur in the News
+      </h2>
+      <p style="font-size:0.78rem;color:rgba(255,255,255,0.35);margin-bottom:16px;">Latest headlines mentioning Kannur — click through to read on the source.</p>
+      {news_html}
+      <p style="font-size:0.7rem;color:rgba(255,255,255,0.3);margin-top:10px;text-align:center;font-style:italic;">Feed source: Google News · headlines link out to publishers</p>
+    </div>
+
+    <!-- GOLD RATE MICRO-WIDGET -->
+    <a href="gold-rate.html" style="display:block;text-decoration:none;background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(122,59,16,0.15));border:1px solid rgba(212,175,55,0.35);border-radius:14px;padding:18px 20px;margin-top:20px;transition:transform 0.2s;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='none'">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <span style="font-size:1.4rem;">🪙</span>
+        <span style="color:#D4AF37;font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Today's Kerala Gold Rate</span>
+      </div>
+      <div style="color:#fff;font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;">1 Pavan (8 g) · 22 K</div>
+      <div style="color:rgba(255,255,255,0.55);font-size:0.82rem;margin-top:4px;">See today's rate &amp; 24h change →</div>
+    </a>
   </div>
 </div>
 

@@ -1,0 +1,32 @@
+name: Daily Kerala Gold Rate
+
+on:
+  schedule:
+    # 09:00 AM IST = 03:30 UTC (Kerala jewellery associations publish morning rates around this time)
+    - cron: '30 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-gold:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate gold rate page
+        env:
+          GOLDAPI_KEY: ${{ secrets.GOLDAPI_KEY }}
+        run: python generate_gold.py
+
+      - name: Commit and push updated gold rate
+        run: |
+          git config --global user.name "TravelKannur Bot"
+          git config --global user.email "info@travelkannur.in"
+          git add gold-rate.html gold-rate.json sitemap.xml
+          git diff --staged --quiet || git commit -m "Daily gold rate update - $(date +'%d %b %Y')"
+          git push
