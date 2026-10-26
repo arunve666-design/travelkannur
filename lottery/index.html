@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Coupon Number Draw</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#EDF0F5; --surface:#FFFFFF; --ink:#16203A; --muted:#5B6680; --line:#D5DBE6;
+  --ticket:#1F3B8C; --ticket-ink:#F6F3E8; --gold:#E9A919; --gold-ink:#2A1E00;
+  --bad:#B42318; --bad-bg:#FDE7E5;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0D1322; --surface:#151D31; --ink:#E7EBF4; --muted:#93A0BC; --line:#28324A;
+  --ticket:#2B4BA8; --gold:#F0B83A; --gold-ink:#241900; --bad:#FF8A80; --bad-bg:#3A1513; color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:520px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right)) 48px max(16px,env(safe-area-inset-left));display:grid;gap:22px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(36px,10vw,50px);line-height:.95;margin:4px 0 6px}
+p{margin:0}
+.muted{color:var(--muted)}
+.ticket{background:var(--ticket);color:var(--ticket-ink);border-radius:14px;padding:22px;display:grid;gap:8px}
+.t-label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.8;font-weight:600}
+.number{font-family:var(--display);font-weight:900;font-size:clamp(96px,30vw,150px);line-height:.85;font-variant-numeric:tabular-nums}
+.number.idle{opacity:.35}
+.number.won{color:var(--gold)}
+.t-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:2px dashed rgba(246,243,232,.35);padding-top:10px;font-size:14px}
+form{display:grid;gap:14px}
+label{display:grid;gap:6px;font-weight:600;font-size:14px}
+input{font:inherit;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+input:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.hint{font-weight:400;color:var(--muted);font-size:13px}
+button{font:inherit;font-weight:700;font-size:17px;border:0;border-radius:10px;padding:15px 22px;cursor:pointer;background:var(--gold);color:var(--gold-ink)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.err{background:var(--bad-bg);color:var(--bad);border-radius:10px;padding:12px 14px;font-weight:500}
+.done{display:grid;gap:6px}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="eyebrow" id="range">Lottery · Numbers 100 – 1300</span>
+    <h1 id="title">Coupon Number Draw</h1>
+    <p class="muted">Enter your details and tap Draw. You get one number, picked at random from the numbers still left. Nobody else can get the same number.</p>
+  </header>
+
+  <section class="ticket" aria-live="polite">
+    <span class="t-label">Your number</span>
+    <div class="number idle" id="num">–––</div>
+    <div class="t-foot"><span id="drawNo">Not drawn yet</span><span id="left">Checking pool…</span></div>
+  </section>
+
+  <form id="form" novalidate>
+    <label for="name">Your name
+      <input id="name" name="name" autocomplete="name" maxlength="80" required>
+    </label>
+    <label for="phone">Phone number <span class="hint">Used to make sure each person draws once</span>
+      <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" required>
+    </label>
+    <label for="code" id="codeRow" hidden>Coupon code <span class="hint">Printed on your coupon, e.g. ABCD-2345</span>
+      <input id="code" name="code" autocapitalize="characters" autocomplete="off" maxlength="20">
+    </label>
+    <div class="err" id="err" hidden></div>
+    <button id="btn" type="submit" disabled>Draw my number</button>
+  </form>
+
+  <section class="done" id="done" hidden>
+    <p><strong id="doneMsg"></strong></p>
+    <p class="muted">Take a screenshot of this screen to keep your number. Opening this page again on this phone will also show it.</p>
+  </section>
+</div>
+
+<script>
+// Paste your Apps Script web app URL here (Deploy → Manage deployments → Web app URL, ends in /exec).
+var API_URL = "";
+
+(function(){
+  var MIN = 100, MAX = 1300, TOTAL = MAX - MIN + 1, requireCode = false;
+  var $ = function(id){ return document.getElementById(id); };
+  var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var KEY = 'coupon-draw-result';
+  function store(v){ try{ localStorage.setItem(KEY, JSON.stringify(v)); }catch(e){} }
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY) || 'null'); }catch(e){ return null; } }
+
+  function api(body){
+    return fetch(API_URL, { method: 'POST', body: JSON.stringify(body) }).then(function(r){
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    });
+  }
+  function showResult(r, fresh){
+    var n = $('num'); n.textContent = r.number; n.classList.remove('idle'); n.classList.add('won');
+    $('drawNo').textContent = 'Draw #' + r.drawNo;
+    $('form').hidden = true; $('done').hidden = false;
+    $('doneMsg').textContent = fresh ? 'Number ' + r.number + ' is yours. It has been removed from the pool.' : 'You already drew number ' + r.number + '. Each person gets one number.';
+  }
+  function showError(msg){ var e = $('err'); e.textContent = msg; e.hidden = false; }
+  function setLeft(left){ $('left').textContent = left.toLocaleString() + ' of ' + TOTAL.toLocaleString() + ' left'; }
+
+  var saved = load();
+  if (saved && saved.number) showResult(saved, false);
+
+  if (!API_URL) { $('left').textContent = ''; showError('The draw isn\'t open yet. Please check back soon.'); return; }
+
+  api({ action: 'status' }).then(function(s){
+    MIN = s.min; MAX = s.max; TOTAL = s.total; requireCode = !!s.requireCode;
+    $('range').textContent = 'Lottery · Numbers ' + MIN + ' – ' + MAX;
+    if (s.title) { $('title').textContent = s.title; document.title = s.title; }
+    $('codeRow').hidden = !requireCode;
+    setLeft(s.left);
+    if (saved && saved.number) return;
+    if (!s.open) showError('The draw is closed right now.');
+    else if (s.left === 0) showError('Every number has been drawn. The pool is empty.');
+    else $('btn').disabled = false;
+  }).catch(function(){ $('left').textContent = ''; showError('Couldn\'t reach the draw. Check your connection and reload the page.'); });
+  api({ action: 'visit', device: navigator.userAgent }).catch(function(){});
+
+  $('form').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    $('err').hidden = true;
+    var name = $('name').value.trim(), phone = $('phone').value.trim(), code = $('code').value.trim();
+    if (name.length < 2) return showError('Please enter your name.');
+    if (phone.replace(/\D/g,'').length < 6) return showError('Please enter a valid phone number.');
+    if (requireCode && !code) return showError('Please enter the code from your coupon.');
+
+    var btn = $('btn'); btn.disabled = true; btn.textContent = 'Shuffling…';
+    var n = $('num'); n.classList.remove('idle','won');
+    var result, start = Date.now(), last = 0;
+    function spin(){
+      var elapsed = Date.now() - start;
+      if (result !== undefined && (elapsed > 2200 || reduced)) return finish();
+      var interval = 40 + Math.pow(Math.min(elapsed / 2200, 1), 2) * 140;
+      if (!reduced && elapsed - last > interval) { n.textContent = MIN + Math.floor(Math.random() * TOTAL); last = elapsed; }
+      requestAnimationFrame(spin);
+    }
+    function finish(){
+      btn.disabled = false; btn.textContent = 'Draw my number';
+      if (result && (result.status === 'assigned' || result.status === 'existing')) {
+        store({ number: result.number, drawNo: result.drawNo });
+        if (typeof result.left === 'number') setLeft(result.left);
+        showResult(result, result.status === 'assigned');
+      } else {
+        n.textContent = '–––'; n.classList.add('idle');
+        showError((result && result.message) || 'Something went wrong. Please try again.');
+        if (result && result.status === 'empty') btn.disabled = true;
+      }
+    }
+    requestAnimationFrame(spin);
+    api({ action: 'draw', name: name, phone: phone, code: code, device: navigator.userAgent })
+      .then(function(r){ result = r; })
+      .catch(function(){ result = { status:'error', message:'Couldn\'t reach the draw. Check your connection and try again.' }; });
+  });
+})();
+</script>
+</body>
+</html>
