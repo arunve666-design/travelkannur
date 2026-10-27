@@ -6,60 +6,27 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Coupon Number Draw · Demo</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="lottery.css?v=2">
 <style>
-:root{
-  --bg:#EDF0F5; --surface:#FFFFFF; --ink:#16203A; --muted:#5B6680; --line:#D5DBE6;
-  --ticket:#1F3B8C; --ticket-ink:#F6F3E8; --gold:#E9A919; --gold-ink:#2A1E00;
-  --ok:#1E7A4F; --ok-bg:#E2F3EA; --warn:#9A5B00; --warn-bg:#FBEFD8; --bad:#B42318; --bad-bg:#FDE7E5;
-  --cell:#C9D2E3;
-  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
-  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
-}
-@media (prefers-color-scheme: dark){:root{
-  --bg:#0D1322; --surface:#151D31; --ink:#E7EBF4; --muted:#93A0BC; --line:#28324A;
-  --ticket:#2B4BA8; --gold:#F0B83A; --gold-ink:#241900;
-  --ok:#5BD196; --ok-bg:#12301F; --warn:#F2B860; --warn-bg:#33240B; --bad:#FF8A80; --bad-bg:#3A1513;
-  --cell:#34426A; color-scheme:dark}}
-*{box-sizing:border-box}
-html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
 .banner{background:var(--gold);color:var(--gold-ink);font-weight:600;font-size:14px;text-align:center;padding:8px max(16px,env(safe-area-inset-right)) 8px max(16px,env(safe-area-inset-left))}
-.wrap{max-width:720px;margin:0 auto;padding:24px max(16px,env(safe-area-inset-right)) 48px max(16px,env(safe-area-inset-left));display:grid;gap:22px}
-.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
-h1{font-family:var(--display);font-weight:900;font-size:clamp(36px,10vw,50px);line-height:.95;margin:4px 0 6px}
-h2{font-family:var(--display);font-weight:700;font-size:24px;margin:0}
-p{margin:0}
-.muted{color:var(--muted)}
+.shell{max-width:760px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left));display:grid;gap:12px}
 .views{display:flex;gap:4px;border-bottom:1px solid var(--line)}
 .view{font:inherit;font-weight:700;background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;color:var(--muted);cursor:pointer;font-size:15px}
 .view[aria-selected="true"]{color:var(--ink);border-color:var(--gold)}
-.pane{display:grid;gap:20px}
-.ticket{background:var(--ticket);color:var(--ticket-ink);border-radius:14px;padding:22px;display:grid;gap:8px}
-.t-label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.8;font-weight:600}
-.number{font-family:var(--display);font-weight:900;font-size:clamp(96px,30vw,150px);line-height:.85;font-variant-numeric:tabular-nums}
-.number.idle{opacity:.35}
-.number.won{color:var(--gold)}
-.t-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:2px dashed rgba(246,243,232,.35);padding-top:10px;font-size:14px}
-form{display:grid;gap:14px}
-label{display:grid;gap:6px;font-weight:600;font-size:14px}
-input{font:inherit;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
-input:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-.hint{font-weight:400;color:var(--muted);font-size:13px}
-.btn{font:inherit;font-weight:700;font-size:17px;border:0;border-radius:10px;padding:15px 22px;cursor:pointer;background:var(--gold);color:var(--gold-ink)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.btn-plain{font:inherit;font-weight:600;font-size:14px;border:1px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer;background:var(--surface);color:var(--ink)}
-.err{background:var(--bad-bg);color:var(--bad);border-radius:10px;padding:12px 14px;font-weight:500}
-.done{display:grid;gap:12px;justify-items:start}
-canvas{width:100%;display:block}
+.democtl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:14px}
+.democtl span{color:var(--muted)}
+#admin{display:grid;gap:18px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .stat{background:var(--surface);padding:12px 14px;display:grid;gap:2px}
 .stat b{font-family:var(--display);font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
 .stat span{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
-.check{border-radius:10px;padding:12px 14px;font-size:14px;background:var(--ok-bg);color:var(--ok)}
+@media (max-width:520px){.stats{grid-template-columns:1fr 1fr}}
+.check{border-radius:10px;padding:12px 14px;font-size:14px}
+.check.ok{background:var(--ok-bg);color:var(--ok)}
+.check.bad{background:var(--bad-bg);color:var(--bad)}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);max-height:420px;overflow-y:auto}
-table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:520px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
 th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
 th{position:sticky;top:0;background:var(--surface);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
 td.num{font-family:var(--display);font-weight:700;font-size:20px}
@@ -69,138 +36,106 @@ td.num{font-family:var(--display);font-weight:700;font-size:20px}
 .pill.warn{background:var(--warn-bg);color:var(--warn)}
 .pill.bad{background:var(--bad-bg);color:var(--bad)}
 .empty{padding:22px;text-align:center;color:var(--muted)}
-[hidden]{display:none!important}
-@media (max-width:480px){.stats{grid-template-columns:1fr 1fr 1fr}.stat b{font-size:22px}}
-@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 <div class="banner">Demo · Everything runs on this device only. No real draw, no data is sent anywhere.</div>
-<div class="wrap">
-  <header>
-    <span class="eyebrow">Lottery · Numbers 100 – 1300</span>
-    <h1>Coupon Number Draw</h1>
-    <p class="muted">Try it as a customer, then switch to the organizer view to see the results list and the audit log.</p>
-  </header>
-
+<div class="shell">
   <div class="views" role="tablist">
     <button class="view" role="tab" id="vCustomer" aria-selected="true">Customer view</button>
     <button class="view" role="tab" id="vAdmin" aria-selected="false">Organizer view</button>
   </div>
-
-  <section class="pane" id="customer">
-    <div class="ticket" aria-live="polite">
-      <span class="t-label">Your number</span>
-      <div class="number idle" id="num">–––</div>
-      <div class="t-foot"><span id="drawNo">Not drawn yet</span><span id="left"></span></div>
-    </div>
-    <form id="form" novalidate>
-      <label for="name">Your name
-        <input id="name" autocomplete="off" maxlength="80">
-      </label>
-      <label for="phone">Phone number <span class="hint">Used to make sure each person draws once</span>
-        <input id="phone" type="tel" inputmode="tel" autocomplete="off" maxlength="20">
-      </label>
-      <div class="err" id="err" hidden></div>
-      <button class="btn" id="btn" type="submit">Draw my number</button>
-    </form>
-    <div class="done" id="done" hidden>
-      <p><strong id="doneMsg"></strong></p>
-      <button class="btn-plain" id="next" type="button">Next customer (try another draw)</button>
-    </div>
-  </section>
-
-  <section class="pane" id="admin" hidden>
-    <div class="row"><h2>Audit desk</h2><button class="btn-plain" id="reset" type="button">Reset demo</button></div>
-    <div class="stats">
-      <div class="stat"><b id="sDrawn">0</b><span>Drawn</span></div>
-      <div class="stat"><b id="sLeft">1,201</b><span>Left</span></div>
-      <div class="stat"><b id="sEvents">0</b><span>Log entries</span></div>
-    </div>
-    <div>
-      <p class="eyebrow" style="margin-bottom:8px">The pool · a square disappears when its number is drawn</p>
-      <canvas id="board" aria-label="Grid of numbers 100 to 1300"></canvas>
-    </div>
-    <div class="check" id="check"></div>
-    <h2>Draws</h2>
-    <div class="tablewrap" id="draws"></div>
-    <h2>Activity log</h2>
-    <div class="tablewrap" id="log"></div>
-    <p class="muted" style="font-size:13px">In the real version these lists live in the organizer's Google Sheet, with a tamper-evident log, an integrity check and open/close controls.</p>
-  </section>
+  <div class="democtl" id="demoCtl">
+    <span>Demo controls:</span>
+    <button class="btn-plain" id="nextCustomer" type="button">Next customer</button>
+    <button class="btn-plain" id="simulate" type="button">Add 5 other customers</button>
+  </div>
 </div>
 
+<main class="wrap" id="lottery"></main>
+
+<section class="wrap" id="admin" hidden>
+  <div class="row"><h2>Audit desk</h2><button class="btn-plain" id="reset" type="button">Reset demo</button></div>
+  <div class="stats">
+    <div class="stat"><b id="sDrawn">0</b><span>Picks</span></div>
+    <div class="stat"><b id="sTiles">0</b><span>Tiles left</span></div>
+    <div class="stat"><b id="sNums">0</b><span>Numbers left</span></div>
+    <div class="stat"><b id="sEvents">0</b><span>Log entries</span></div>
+  </div>
+  <div class="check" id="check"></div>
+  <h2>Draws</h2>
+  <div class="tablewrap" id="draws"></div>
+  <h2>Activity log</h2>
+  <div class="tablewrap" id="log"></div>
+  <p class="muted" style="font-size:13px">In the real version these lists live in the organizer's Google Sheet, with a tamper-evident log, an integrity check and open/close controls.</p>
+</section>
+
+<script src="lottery.js?v=2"></script>
 <script>
 (function(){
-  var MIN = 100, MAX = 1300, TOTAL = MAX - MIN + 1, KEY = 'coupon-draw-demo-v1';
+  var MIN = 100, MAX = 1300, TOTAL = MAX - MIN + 1, KEY = 'coupon-lottery-demo-v2';
   var $ = function(id){ return document.getElementById(id); };
-  var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var state;
-
-  function fresh(){ return { taken: {}, draws: [], log: [] }; }
+  function fresh(){ return { tiles: {}, nums: {}, draws: [], log: [] }; }
   function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
   try{ state = JSON.parse(localStorage.getItem(KEY) || 'null') || fresh(); }catch(e){ state = fresh(); }
+  if (!state.tiles) state = fresh();
 
   function randInt(max){
-    var buf = new Uint32Array(1), limit = Math.floor(4294967296 / max) * max;
-    do { crypto.getRandomValues(buf); } while (buf[0] >= limit);
-    return buf[0] % max;
+    var b = new Uint32Array(1), limit = Math.floor(4294967296 / max) * max;
+    do { crypto.getRandomValues(b); } while (b[0] >= limit);
+    return b[0] % max;
   }
   function log(type, who, number, details){
-    state.log.push({ t: new Date().toISOString(), type: type, name: who.name || '', phone: who.phone || '', n: number == null ? '' : number, d: details || '' });
+    who = who || {};
+    state.log.push({ t: new Date().toISOString(), type: type, name: who.name || '', phone: who.phone || '', tile: who.tile == null ? '' : who.tile, n: number == null ? '' : number, d: details || '' });
   }
-  function left(){ return TOTAL - state.draws.length; }
-  function normPhone(p){ var s = String(p).trim(), d = s.replace(/\D/g,''); return d.length < 6 || d.length > 15 ? '' : (s[0] === '+' ? '+' : '') + d; }
+  function normPhone(p){ var s = String(p || '').trim(), d = s.replace(/\D/g, ''); return d.length < 6 || d.length > 15 ? '' : (s[0] === '+' ? '+' : '') + d; }
+  function usedTiles(){ return Object.keys(state.tiles).map(Number); }
+  function numsLeft(){ return TOTAL - Object.keys(state.nums).length; }
+  function later(v){ return new Promise(function(r){ setTimeout(function(){ r(v); }, 250); }); }
 
   // Same rules as the real backend
-  function draw(name, rawPhone){
-    var phone = normPhone(rawPhone), who = { name: name, phone: phone };
-    if (name.length < 2) { log('rejected_invalid_name', who); return { status:'error', message:'Please enter your name.' }; }
-    if (!phone) { log('rejected_invalid_phone', who); return { status:'error', message:'Please enter a valid phone number.' }; }
+  function pick(f){
+    var name = String(f.name || '').trim(), phone = normPhone(f.phone), tile = parseInt(f.tile, 10);
+    var who = { name: name, phone: phone, tile: tile };
+    if (name.length < 2) { log('rejected_invalid_name', who); return { status: 'error', message: 'Please enter your name.' }; }
+    if (!phone) { log('rejected_invalid_phone', who); return { status: 'error', message: 'Please enter a valid phone number.' }; }
+    if (!(tile >= MIN && tile <= MAX)) { log('rejected_invalid_tile', who); return { status: 'error', message: 'That tile doesn\'t exist.' }; }
     var prior = state.draws.filter(function(d){ return d.phone === phone; })[0];
-    if (prior) { log('repeat_attempt_returned_existing', who, prior.n); return { status:'existing', number: prior.n, drawNo: prior.no }; }
+    if (prior) { log('repeat_attempt_returned_existing', who, prior.n, 'already has tile ' + prior.tile); return { status: 'existing', tile: prior.tile, number: prior.n, drawNo: prior.no }; }
+    if (state.tiles[tile]) { log('rejected_tile_taken', who); return { status: 'tile_taken', message: 'Someone just picked tile ' + tile + '. Please choose another tile.', usedTiles: usedTiles() }; }
     var avail = [];
-    for (var n = MIN; n <= MAX; n++) if (!state.taken[n]) avail.push(n);
-    if (!avail.length) { log('rejected_pool_empty', who); return { status:'empty', message:'Every number has been drawn.' }; }
+    for (var v = MIN; v <= MAX; v++) if (!state.nums[v]) avail.push(v);
+    if (!avail.length) { log('rejected_pool_empty', who); return { status: 'empty', message: 'Every number has been given out.' }; }
     var num = avail[randInt(avail.length)], no = state.draws.length + 1;
-    state.taken[num] = true;
-    state.draws.push({ no: no, n: num, name: name, phone: phone, t: new Date().toISOString(), before: avail.length });
-    log('number_assigned', who, num, 'draw #' + no + ', ' + avail.length + ' left before');
-    return { status:'assigned', number: num, drawNo: no };
+    state.tiles[tile] = no; state.nums[num] = no;
+    state.draws.push({ no: no, tile: tile, n: num, name: name, phone: phone, t: new Date().toISOString(), before: avail.length });
+    log('number_assigned', who, num, 'tile ' + tile + ' revealed ' + num + ', draw #' + no + ', ' + avail.length + ' numbers left before');
+    return { status: 'assigned', tile: tile, number: num, drawNo: no, left: avail.length - 1 };
   }
 
-  // ----- customer view
-  function setLeft(){ $('left').textContent = left().toLocaleString() + ' of ' + TOTAL.toLocaleString() + ' left'; }
-  function showError(m){ $('err').textContent = m; $('err').hidden = false; }
-  function resetCustomer(){
-    $('num').textContent = '–––'; $('num').className = 'number idle';
-    $('drawNo').textContent = 'Not drawn yet'; $('name').value = ''; $('phone').value = '';
-    $('err').hidden = true; $('form').hidden = false; $('done').hidden = true; setLeft();
-  }
-  log('page_opened', {}, null, 'demo'); save();
-  setLeft();
+  var backend = {
+    status: function(){ return later({ open: true, left: numsLeft(), total: TOTAL, min: MIN, max: MAX, title: 'Coupon Number Draw', requireCode: false, usedTiles: usedTiles() }); },
+    visit: function(){ log('page_opened', {}, null, 'demo'); save(); return later({ ok: true }); },
+    draw: function(f){ var r = pick(f); save(); return later(r); }
+  };
 
-  $('form').addEventListener('submit', function(ev){
-    ev.preventDefault(); $('err').hidden = true;
-    var btn = $('btn'), n = $('num'), start = Date.now(), last = 0;
-    var res = draw($('name').value.trim(), $('phone').value); save();
-    if (res.status === 'error' || res.status === 'empty') { showError(res.message); return; }
-    btn.disabled = true; btn.textContent = 'Shuffling…'; n.className = 'number';
-    (function spin(){
-      var el = Date.now() - start;
-      if (el > 2200 || reduced) {
-        btn.disabled = false; btn.textContent = 'Draw my number';
-        n.textContent = res.number; n.className = 'number won';
-        $('drawNo').textContent = 'Draw #' + res.drawNo; setLeft();
-        $('form').hidden = true; $('done').hidden = false;
-        $('doneMsg').textContent = res.status === 'assigned' ? 'Number ' + res.number + ' is yours. It has been removed from the pool.' : 'This phone already drew number ' + res.number + '. Each person gets one number.';
-        return;
-      }
-      if (el - last > 40 + Math.pow(el / 2200, 2) * 140) { n.textContent = MIN + randInt(TOTAL); last = el; }
-      requestAnimationFrame(spin);
-    })();
+  var app = Lottery.init({ mount: $('lottery'), backend: backend, storageKey: 'coupon-lottery-demo-me-v2' });
+
+  // ----- demo controls
+  var GUESTS = ['Anjali', 'Rahul', 'Fathima', 'Vishnu', 'Sneha', 'Arjun', 'Meera', 'Nikhil', 'Divya', 'Ashwin', 'Haritha', 'Sanjay'];
+  $('nextCustomer').addEventListener('click', function(){ app.resetMe(); window.scrollTo(0, 0); });
+  $('simulate').addEventListener('click', function(){
+    for (var i = 0; i < 5; i++) {
+      var free = [];
+      for (var v = MIN; v <= MAX; v++) if (!state.tiles[v]) free.push(v);
+      if (!free.length) break;
+      var phone = '+9198' + String(10000000 + randInt(89999999));
+      pick({ tile: free[randInt(free.length)], name: GUESTS[randInt(GUESTS.length)] + ' (demo)', phone: phone });
+    }
+    save(); app.refresh();
   });
-  $('next').addEventListener('click', resetCustomer);
 
   // ----- organizer view
   function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
@@ -210,44 +145,44 @@ td.num{font-family:var(--display);font-weight:700;font-size:20px}
     var th = el('thead'); th.appendChild(h); t.appendChild(th);
     var b = el('tbody'); rows.forEach(function(r){ b.appendChild(r); }); t.appendChild(b); return t;
   }
-  function drawBoard(){
-    var c = $('board'), w = c.clientWidth || 600, dpr = window.devicePixelRatio || 1, cols = 41, rows = Math.ceil(TOTAL / cols);
-    var gap = 1.5, cell = (w - gap * (cols - 1)) / cols, h = rows * cell + gap * (rows - 1);
-    c.width = w * dpr; c.height = h * dpr; c.style.height = h + 'px';
-    var ctx = c.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,w,h);
-    var cs = getComputedStyle(document.documentElement), live = cs.getPropertyValue('--cell'), gone = cs.getPropertyValue('--line');
-    for (var i = 0; i < TOTAL; i++) {
-      var x = (i % cols) * (cell + gap), y = Math.floor(i / cols) * (cell + gap);
-      if (state.taken[MIN + i]) { ctx.strokeStyle = gone; ctx.lineWidth = .6; ctx.strokeRect(x + .5, y + .5, cell - 1, cell - 1); }
-      else { ctx.fillStyle = live; ctx.fillRect(x, y, cell, cell); }
-    }
-  }
   function renderAdmin(){
-    $('sDrawn').textContent = state.draws.length; $('sLeft').textContent = left().toLocaleString(); $('sEvents').textContent = state.log.length;
-    $('check').textContent = 'Integrity check passed: every drawn number belongs to one person and every phone drew once (' + state.draws.length + ' draws).';
-    var d = $('draws'); d.innerHTML = '';
-    if (!state.draws.length) d.appendChild(el('div', 'empty', 'No draws yet. Switch to the customer view and draw a number.'));
-    else d.appendChild(table(['#','Number','Name','Phone','Time','Left before'], state.draws.map(function(r){
-      var tr = el('tr'); [ [r.no,'mono'], [r.n,'num'], [r.name], [r.phone,'mono'], [time(r.t),'mono'], [r.before,'mono'] ].forEach(function(c){ tr.appendChild(el('td', c[1], c[0])); }); return tr;
+    $('sDrawn').textContent = state.draws.length;
+    $('sTiles').textContent = (TOTAL - usedTiles().length).toLocaleString('en-IN');
+    $('sNums').textContent = numsLeft().toLocaleString('en-IN');
+    $('sEvents').textContent = state.log.length;
+
+    var issues = 0, t = {}, n = {}, p = {};
+    state.draws.forEach(function(d){ if (t[d.tile] || n[d.n] || p[d.phone]) issues++; t[d.tile] = n[d.n] = p[d.phone] = 1; });
+    var c = $('check');
+    c.className = 'check ' + (issues ? 'bad' : 'ok');
+    c.textContent = issues ? issues + ' problem(s) found.' : 'Integrity check passed: every tile was picked once, every number was given out once, and every phone picked once (' + state.draws.length + ' picks).';
+
+    var d = $('draws'); d.textContent = '';
+    if (!state.draws.length) d.appendChild(el('div', 'empty', 'No picks yet. Switch to the customer view and pick a tile.'));
+    else d.appendChild(table(['#', 'Tile', 'Number', 'Name', 'Phone', 'Time'], state.draws.slice().reverse().map(function(r){
+      var tr = el('tr');
+      [[r.no, 'mono'], [r.tile, 'num'], [r.n, 'num'], [r.name], [r.phone, 'mono'], [time(r.t), 'mono']].forEach(function(x){ tr.appendChild(el('td', x[1], x[0])); });
+      return tr;
     })));
-    var l = $('log'); l.innerHTML = '';
-    l.appendChild(table(['Time','Event','Name','Phone','Number','Details'], state.log.slice().reverse().map(function(r){
+
+    var l = $('log'); l.textContent = '';
+    l.appendChild(table(['Time', 'Event', 'Name', 'Phone', 'Tile', 'Number', 'Details'], state.log.slice().reverse().map(function(r){
       var tr = el('tr'), pc = r.type === 'number_assigned' ? 'assigned' : /rejected/.test(r.type) ? 'bad' : /repeat/.test(r.type) ? 'warn' : '';
-      tr.appendChild(el('td','mono',time(r.t)));
-      var tdp = el('td'); tdp.appendChild(el('span','pill ' + pc, r.type.replace(/_/g,' '))); tr.appendChild(tdp);
-      [r.name, r.phone, r.n, r.d].forEach(function(v){ tr.appendChild(el('td','mono',String(v))); }); return tr;
+      tr.appendChild(el('td', 'mono', time(r.t)));
+      var tdp = el('td'); tdp.appendChild(el('span', 'pill ' + pc, r.type.replace(/_/g, ' '))); tr.appendChild(tdp);
+      [r.name, r.phone, r.tile, r.n, r.d].forEach(function(v){ tr.appendChild(el('td', 'mono', String(v))); });
+      return tr;
     })));
-    drawBoard();
   }
   function show(which){
-    $('vCustomer').setAttribute('aria-selected', which === 'c'); $('vAdmin').setAttribute('aria-selected', which === 'a');
-    $('customer').hidden = which !== 'c'; $('admin').hidden = which !== 'a';
-    if (which === 'a') renderAdmin(); else setLeft();
+    $('vCustomer').setAttribute('aria-selected', which === 'c');
+    $('vAdmin').setAttribute('aria-selected', which === 'a');
+    $('lottery').hidden = which !== 'c'; $('demoCtl').hidden = which !== 'c'; $('admin').hidden = which !== 'a';
+    if (which === 'a') renderAdmin(); else app.refresh();
   }
   $('vCustomer').addEventListener('click', function(){ show('c'); });
   $('vAdmin').addEventListener('click', function(){ show('a'); });
-  $('reset').addEventListener('click', function(){ state = fresh(); log('demo_reset', {}); save(); renderAdmin(); resetCustomer(); });
-  window.addEventListener('resize', function(){ if (!$('admin').hidden) drawBoard(); });
+  $('reset').addEventListener('click', function(){ state = fresh(); log('demo_reset'); save(); app.resetMe(); app.refresh(); renderAdmin(); });
 })();
 </script>
 </body>
