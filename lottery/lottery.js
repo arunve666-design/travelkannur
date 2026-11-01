@@ -32,6 +32,7 @@
       '<span class="eyebrow" data-l="range">Online cards 100 – 699</span>' +
       '<h1 data-l="title">Prize Coupon Draw</h1>' +
       '<p class="drawinfo" data-l="drawInfo" hidden></p>' +
+      '<p class="notice" data-l="notice" hidden></p>' +
       '<p class="muted">Choose a card number below. Each card hides its own draw number, just like the scratch panel on a printed card. Tap a card, enter your details and it is revealed. Once a card is taken, nobody else can get it or its draw number.</p>' +
     '</header>' +
     '<section class="ticket" data-l="mine" hidden aria-live="polite">' +
@@ -82,6 +83,7 @@
     root.innerHTML = TEMPLATE;
     var $ = {};
     Array.prototype.forEach.call(root.querySelectorAll('[data-l]'), function (el) { $[el.getAttribute('data-l')] = el; });
+    if (opts.notice) { $.notice.textContent = opts.notice; $.notice.hidden = false; }
     if (opts.banner && opts.banner.src) { $.hero.src = opts.banner.src; $.hero.alt = opts.banner.alt || ''; $.hero.hidden = false; }
 
     var MIN = 100, MAX = 1300, FROM = 100, TO = 699, TOTAL = 600, requireCode = false, isOpen = true, numbersLeft = null;

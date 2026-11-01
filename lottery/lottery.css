@@ -28,6 +28,8 @@ p{margin:0}
 
 .drawinfo{display:inline-block;margin:0 0 10px;padding:6px 12px;border-radius:999px;background:var(--gold);color:var(--gold-ink);font-weight:700;font-size:15px}
 
+.notice{margin:0 0 10px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:14px;line-height:1.45}
+
 /* Ticket */
 .ticket{background:var(--ticket);color:var(--ticket-ink);border-radius:14px;padding:20px 22px;display:grid;gap:8px}
 .t-label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.8;font-weight:600}

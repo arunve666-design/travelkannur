@@ -6,11 +6,11 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Prize Coupon Draw</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="lottery.css?v=4">
+<link rel="stylesheet" href="lottery.css?v=5">
 </head>
 <body>
 <main class="wrap" id="lottery"></main>
-<script src="lottery.js?v=4"></script>
+<script src="lottery.js?v=5"></script>
 <script>
 // Paste your Apps Script web app URL here (Deploy → Manage deployments → Web app URL, ends in /exec).
 var API_URL = "";
@@ -18,7 +18,7 @@ var API_URL = "";
 Lottery.init({
   mount: document.getElementById('lottery'),
   backend: API_URL ? Lottery.remote(API_URL) : null,
-  storageKey: 'coupon-lottery-me-v2',
+  storageKey: 'coupon-lottery-me-v2', notice: 'Notice: This page only lets you choose a card number. It does not collect any money or payment details. Coupon prices, sales, prizes and the draw are managed entirely by the Mylanjari Bhagavathi Puthiya Bhagavathi Kshetram temple committee, which is fully responsible for them. Please contact the committee for any questions.',
   banner: { src: 'coupon-banner.jpg', alt: 'Mylanjari Bhagavathi Puthiya Bhagavathi Kshetram prize coupon (മൈലാഞ്ചരി ഭഗവതി പുതിയ ഭഗവതി ക്ഷേത്രം സമ്മാന കൂപ്പൺ). Prizes: 1st scooter, 2nd fridge, 3rd TV, 4th mobile phone, 5th washing machine, 6th 2 smart watches, 7th 5 electric kettles, 8th 5 pressure cookers. ' }
 });
 </script>

@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Prize Coupon Draw · Demo</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
-<link rel="stylesheet" href="lottery.css?v=4">
+<link rel="stylesheet" href="lottery.css?v=5">
 <style>
 .banner{background:var(--gold);color:var(--gold-ink);font-weight:600;font-size:14px;text-align:center;padding:8px max(16px,env(safe-area-inset-right)) 8px max(16px,env(safe-area-inset-left))}
 .shell{max-width:760px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left));display:grid;gap:12px}
@@ -84,7 +84,7 @@ td.num{font-family:var(--display);font-weight:700;font-size:20px}
   <p class="muted" style="font-size:13px">In the real version these lists live in the organizer's Google Sheet, with a tamper-evident log, an integrity check and open/close controls.</p>
 </section>
 
-<script src="lottery.js?v=4"></script>
+<script src="lottery.js?v=5"></script>
 <script>
 (function(){
   var MIN = 100, MAX = 1300, FROM = 100, TO = 699, KEY = 'coupon-lottery-demo-v3';
@@ -142,7 +142,7 @@ td.num{font-family:var(--display);font-weight:700;font-size:20px}
     draw: function(f){ var r = sell(f); save(); return later(r); }
   };
 
-  var app = Lottery.init({ mount: $('lottery'), backend: backend, storageKey: 'coupon-lottery-demo-me-v3', banner: { src: 'coupon-banner.jpg', alt: BANNER_ALT } });
+  var app = Lottery.init({ mount: $('lottery'), backend: backend, storageKey: 'coupon-lottery-demo-me-v3', notice: 'Notice: This page only lets you choose a card number. It does not collect any money or payment details. Coupon prices, sales, prizes and the draw are managed entirely by the Mylanjari Bhagavathi Puthiya Bhagavathi Kshetram temple committee, which is fully responsible for them. Please contact the committee for any questions.', banner: { src: 'coupon-banner.jpg', alt: BANNER_ALT } });
 
   // ----- demo controls
   var GUESTS = ['Anjali', 'Rahul', 'Fathima', 'Vishnu', 'Sneha', 'Arjun', 'Meera', 'Nikhil', 'Divya', 'Ashwin', 'Haritha', 'Sanjay'];
