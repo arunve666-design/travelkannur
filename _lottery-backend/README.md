@@ -7,19 +7,21 @@ Both pages are hidden from search engines (`noindex` + `robots.txt`), not in the
 
 ## How the draw works
 
-1. The page lists tiles **100–1300**.
-2. A customer taps a tile, enters name + phone (and a coupon code if enabled) and taps **Open tile**.
-3. The tile shuffles and reveals a **random hidden number (100–1300) that nobody has received yet**.
-4. From then on the **tile is gone for everyone** and the **number can never come out of another tile**.
-   The tile list refreshes every 15 seconds; if two people tap the same tile at once, the server gives it
-   to the first and asks the second to choose another.
-5. Each phone number gets one pick. Trying again shows the original result.
+- Every card number 100–1300 has **one fixed hidden draw number** (also 100–1300), made once as a random
+  shuffle when you run Set up. No two cards share a draw number.
+- **Half online, half printed.** Settings `online_from`–`online_to` (default 100–699) are sold on the page;
+  the rest (700–1300) are printed scratch cards. The **Print tab** lists card number + scratch number for the printer.
+- Online, a customer picks a card, enters name + phone, and the page reveals that card's fixed draw number.
+  The card is then gone for everyone. Each phone number gets one card.
+- On draw night, **Lottery → Find who holds a draw number** shows the card, whether it was sold online or
+  printed, and the buyer.
+- Once cards go to the printer, set Settings `numbers_locked` to TRUE so the numbers can never be regenerated.
 
 ## One-time setup (on a computer)
 
 1. Create a new Google Sheet → **Extensions → Apps Script**.
 2. Replace `Code.gs` with `Code.gs` from this folder. Save.
-3. Reload the Sheet → **Lottery → Set up / reset**, allow permissions. Tiles and numbers 100–1300 are created.
+3. Reload the Sheet → **Lottery → Set up (first time) / clear online sales**, allow permissions. Card numbers, hidden draw numbers and the Print tab are created.
 4. **Deploy → New deployment → Web app**, Execute as **Me**, Who has access **Anyone** → Deploy. Copy the URL (ends in `/exec`).
 5. In `lottery/index.html`, paste that URL into `var API_URL = "";` and commit. The page goes live within a minute or two.
 
@@ -29,13 +31,15 @@ After changing `Code.gs`, use **Deploy → Manage deployments → Edit → New v
 
 | Tab | What it holds |
 |---|---|
-| **Draws** | Official results: draw #, tile picked, number revealed, name, phone, coupon code, time |
-| **Log** | Every page visit, pick, repeat attempt, taken-tile clash, rejection and error, hash-chained so later edits are detectable |
-| **Pool** | Every value 100–1300: is the tile used, is the number given, and in which draw |
-| **Settings** | `open` (TRUE/FALSE), range, `require_code` |
+| **Settings** | Range, online range, `open`, `require_code`, `draw_info` (date line on the page), `numbers_locked` |
+| **Pool** | Every card: online or printed, its hidden draw number, sale status |
+| **Print** | Printed cards only: card number + scratch number to print; fill Sold to / Phone / Notes as you sell |
+| **Draws** | Online sales: card number, draw number, name, phone, time |
+| **Log** | Every page visit, sale, repeat attempt, rejection, lookup and error, hash-chained so later edits are detectable |
 | **Codes** | Optional one-time coupon codes |
 
-**Lottery menu:** Run integrity check · Open / Close the draw · Generate coupon codes · Set up / reset.
+**Lottery menu:** Find who holds a draw number · Run integrity check · Open / Close online sales ·
+Generate coupon codes · Set up / clear online sales (keeps card numbers) · Generate new card numbers (before printing only).
 
-The integrity check confirms every tile was picked once, every number was given out once, every phone
-picked once, the Pool matches the Draws list, and the log hash chain is unbroken.
+The integrity check confirms every card has its own draw number and the list has not changed since it was made,
+the Print tab matches, every online card was sold once, every phone bought once, and the log hash chain is unbroken.

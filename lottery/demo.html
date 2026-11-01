@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Coupon Number Draw · Demo</title>
+<title>Prize Coupon Draw · Demo</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
-<link rel="stylesheet" href="lottery.css?v=2">
+<link rel="stylesheet" href="lottery.css?v=4">
 <style>
 .banner{background:var(--gold);color:var(--gold-ink);font-weight:600;font-size:14px;text-align:center;padding:8px max(16px,env(safe-area-inset-right)) 8px max(16px,env(safe-area-inset-left))}
 .shell{max-width:760px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left));display:grid;gap:12px}
@@ -39,7 +39,7 @@ td.num{font-family:var(--display);font-weight:700;font-size:20px}
 </style>
 </head>
 <body>
-<div class="banner">Demo · Everything runs on this device only. No real draw, no data is sent anywhere.</div>
+<div class="banner">Demo · Everything runs on this device only. No real sale, no data is sent anywhere.</div>
 <div class="shell">
   <div class="views" role="tablist">
     <button class="view" role="tab" id="vCustomer" aria-selected="true">Customer view</button>
@@ -55,84 +55,104 @@ td.num{font-family:var(--display);font-weight:700;font-size:20px}
 <main class="wrap" id="lottery"></main>
 
 <section class="wrap" id="admin" hidden>
-  <div class="row"><h2>Audit desk</h2><button class="btn-plain" id="reset" type="button">Reset demo</button></div>
+  <div class="row"><h2>Organizer desk</h2><button class="btn-plain" id="reset" type="button">Reset demo</button></div>
   <div class="stats">
-    <div class="stat"><b id="sDrawn">0</b><span>Picks</span></div>
-    <div class="stat"><b id="sTiles">0</b><span>Tiles left</span></div>
-    <div class="stat"><b id="sNums">0</b><span>Numbers left</span></div>
+    <div class="stat"><b id="sSold">0</b><span>Sold online</span></div>
+    <div class="stat"><b id="sLeft">0</b><span>Online left</span></div>
+    <div class="stat"><b id="sPrinted">0</b><span>Printed cards</span></div>
     <div class="stat"><b id="sEvents">0</b><span>Log entries</span></div>
   </div>
   <div class="check" id="check"></div>
-  <h2>Draws</h2>
+
+  <h2>Draw night: who holds a number?</h2>
+  <form class="find" id="lookup" novalidate>
+    <label class="sr" for="lookupIn">Winning draw number</label>
+    <input id="lookupIn" type="number" inputmode="numeric" placeholder="e.g. 874">
+    <button class="btn-plain" type="submit">Find</button>
+  </form>
+  <p id="lookupOut" class="muted" aria-live="polite">Type a winning draw number to see which card has it and who bought it.</p>
+
+  <h2>Online sales</h2>
   <div class="tablewrap" id="draws"></div>
+
+  <h2>Print list for scratch cards</h2>
+  <p class="muted" style="font-size:14px">Card number goes in the card-number box, scratch number under the silver scratch panel. In the real version this is the Print tab of the Google Sheet, with columns to record who bought each card.</p>
+  <div class="tablewrap" id="print"></div>
+
   <h2>Activity log</h2>
   <div class="tablewrap" id="log"></div>
   <p class="muted" style="font-size:13px">In the real version these lists live in the organizer's Google Sheet, with a tamper-evident log, an integrity check and open/close controls.</p>
 </section>
 
-<script src="lottery.js?v=2"></script>
+<script src="lottery.js?v=4"></script>
 <script>
 (function(){
-  var MIN = 100, MAX = 1300, TOTAL = MAX - MIN + 1, KEY = 'coupon-lottery-demo-v2';
+  var MIN = 100, MAX = 1300, FROM = 100, TO = 699, KEY = 'coupon-lottery-demo-v3';
+  var BANNER_ALT = 'Mylanjari Bhagavathi Puthiya Bhagavathi Kshetram prize coupon (മൈലാഞ്ചരി ഭഗവതി പുതിയ ഭഗവതി ക്ഷേത്രം സമ്മാന കൂപ്പൺ). Prizes: 1st scooter, 2nd fridge, 3rd TV, 4th mobile phone, 5th washing machine, 6th 2 smart watches, 7th 5 electric kettles, 8th 5 pressure cookers.';
   var $ = function(id){ return document.getElementById(id); };
   var state;
-  function fresh(){ return { tiles: {}, nums: {}, draws: [], log: [] }; }
-  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
-  try{ state = JSON.parse(localStorage.getItem(KEY) || 'null') || fresh(); }catch(e){ state = fresh(); }
-  if (!state.tiles) state = fresh();
 
   function randInt(max){
     var b = new Uint32Array(1), limit = Math.floor(4294967296 / max) * max;
     do { crypto.getRandomValues(b); } while (b[0] >= limit);
     return b[0] % max;
   }
+  // Fixed card -> draw number list, made once (a shuffle of MIN..MAX)
+  function makeNumbers(){
+    var h = []; for (var n = MIN; n <= MAX; n++) h.push(n);
+    for (var i = h.length - 1; i > 0; i--) { var j = randInt(i + 1), t = h[i]; h[i] = h[j]; h[j] = t; }
+    var map = {}; for (var c = MIN; c <= MAX; c++) map[c] = h[c - MIN];
+    return map;
+  }
+  function fresh(keepNumbers){ return { numbers: keepNumbers || makeNumbers(), sold: {}, draws: [], log: [] }; }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+  try{ state = JSON.parse(localStorage.getItem(KEY) || 'null'); }catch(e){ state = null; }
+  if (!state || !state.numbers) { state = fresh(); save(); }
+
   function log(type, who, number, details){
     who = who || {};
     state.log.push({ t: new Date().toISOString(), type: type, name: who.name || '', phone: who.phone || '', tile: who.tile == null ? '' : who.tile, n: number == null ? '' : number, d: details || '' });
   }
   function normPhone(p){ var s = String(p || '').trim(), d = s.replace(/\D/g, ''); return d.length < 6 || d.length > 15 ? '' : (s[0] === '+' ? '+' : '') + d; }
-  function usedTiles(){ return Object.keys(state.tiles).map(Number); }
-  function numsLeft(){ return TOTAL - Object.keys(state.nums).length; }
+  function usedTiles(){ return Object.keys(state.sold).map(Number); }
+  function onlineTotal(){ return TO - FROM + 1; }
+  function onlineLeft(){ return onlineTotal() - state.draws.length; }
   function later(v){ return new Promise(function(r){ setTimeout(function(){ r(v); }, 250); }); }
 
   // Same rules as the real backend
-  function pick(f){
+  function sell(f){
     var name = String(f.name || '').trim(), phone = normPhone(f.phone), tile = parseInt(f.tile, 10);
     var who = { name: name, phone: phone, tile: tile };
     if (name.length < 2) { log('rejected_invalid_name', who); return { status: 'error', message: 'Please enter your name.' }; }
     if (!phone) { log('rejected_invalid_phone', who); return { status: 'error', message: 'Please enter a valid phone number.' }; }
-    if (!(tile >= MIN && tile <= MAX)) { log('rejected_invalid_tile', who); return { status: 'error', message: 'That tile doesn\'t exist.' }; }
+    if (!(tile >= FROM && tile <= TO)) { log('rejected_not_online_card', who); return { status: 'error', message: 'That card isn\'t sold online.' }; }
     var prior = state.draws.filter(function(d){ return d.phone === phone; })[0];
-    if (prior) { log('repeat_attempt_returned_existing', who, prior.n, 'already has tile ' + prior.tile); return { status: 'existing', tile: prior.tile, number: prior.n, drawNo: prior.no }; }
-    if (state.tiles[tile]) { log('rejected_tile_taken', who); return { status: 'tile_taken', message: 'Someone just picked tile ' + tile + '. Please choose another tile.', usedTiles: usedTiles() }; }
-    var avail = [];
-    for (var v = MIN; v <= MAX; v++) if (!state.nums[v]) avail.push(v);
-    if (!avail.length) { log('rejected_pool_empty', who); return { status: 'empty', message: 'Every number has been given out.' }; }
-    var num = avail[randInt(avail.length)], no = state.draws.length + 1;
-    state.tiles[tile] = no; state.nums[num] = no;
-    state.draws.push({ no: no, tile: tile, n: num, name: name, phone: phone, t: new Date().toISOString(), before: avail.length });
-    log('number_assigned', who, num, 'tile ' + tile + ' revealed ' + num + ', draw #' + no + ', ' + avail.length + ' numbers left before');
-    return { status: 'assigned', tile: tile, number: num, drawNo: no, left: avail.length - 1 };
+    if (prior) { log('repeat_attempt_returned_existing', who, prior.n, 'already has card ' + prior.tile); return { status: 'existing', tile: prior.tile, number: prior.n, drawNo: prior.no }; }
+    if (state.sold[tile]) { log('rejected_card_taken', who); return { status: 'tile_taken', message: 'Someone just took card ' + tile + '. Please choose another card.', usedTiles: usedTiles() }; }
+    var num = state.numbers[tile], no = state.draws.length + 1, left = onlineLeft();
+    state.sold[tile] = no;
+    state.draws.push({ no: no, tile: tile, n: num, name: name, phone: phone, t: new Date().toISOString(), before: left });
+    log('card_sold_online', who, num, 'card ' + tile + ' revealed ' + num + ', sale #' + no);
+    return { status: 'assigned', tile: tile, number: num, drawNo: no, left: left - 1 };
   }
 
   var backend = {
-    status: function(){ return later({ open: true, left: numsLeft(), total: TOTAL, min: MIN, max: MAX, title: 'Coupon Number Draw', requireCode: false, usedTiles: usedTiles() }); },
+    status: function(){ return later({ open: true, left: onlineLeft(), total: onlineTotal(), min: MIN, max: MAX, onlineFrom: FROM, onlineTo: TO, title: 'Prize Coupon Draw', drawInfo: 'Draw: 21 January, 10 pm', requireCode: false, usedTiles: usedTiles() }); },
     visit: function(){ log('page_opened', {}, null, 'demo'); save(); return later({ ok: true }); },
-    draw: function(f){ var r = pick(f); save(); return later(r); }
+    draw: function(f){ var r = sell(f); save(); return later(r); }
   };
 
-  var app = Lottery.init({ mount: $('lottery'), backend: backend, storageKey: 'coupon-lottery-demo-me-v2' });
+  var app = Lottery.init({ mount: $('lottery'), backend: backend, storageKey: 'coupon-lottery-demo-me-v3', banner: { src: 'coupon-banner.jpg', alt: BANNER_ALT } });
 
   // ----- demo controls
   var GUESTS = ['Anjali', 'Rahul', 'Fathima', 'Vishnu', 'Sneha', 'Arjun', 'Meera', 'Nikhil', 'Divya', 'Ashwin', 'Haritha', 'Sanjay'];
-  $('nextCustomer').addEventListener('click', function(){ app.resetMe(); window.scrollTo(0, 0); });
+  $('nextCustomer').addEventListener('click', function(){ app.resetMe(); app.refresh(); window.scrollTo(0, 0); });
   $('simulate').addEventListener('click', function(){
     for (var i = 0; i < 5; i++) {
       var free = [];
-      for (var v = MIN; v <= MAX; v++) if (!state.tiles[v]) free.push(v);
+      for (var v = FROM; v <= TO; v++) if (!state.sold[v]) free.push(v);
       if (!free.length) break;
-      var phone = '+9198' + String(10000000 + randInt(89999999));
-      pick({ tile: free[randInt(free.length)], name: GUESTS[randInt(GUESTS.length)] + ' (demo)', phone: phone });
+      sell({ tile: free[randInt(free.length)], name: GUESTS[randInt(GUESTS.length)] + ' (demo)', phone: '+9198' + String(10000000 + randInt(89999999)) });
     }
     save(); app.refresh();
   });
@@ -145,35 +165,53 @@ td.num{font-family:var(--display);font-weight:700;font-size:20px}
     var th = el('thead'); th.appendChild(h); t.appendChild(th);
     var b = el('tbody'); rows.forEach(function(r){ b.appendChild(r); }); t.appendChild(b); return t;
   }
+  function row(cells){ var tr = el('tr'); cells.forEach(function(c){ tr.appendChild(el('td', c[1], c[0])); }); return tr; }
+
   function renderAdmin(){
-    $('sDrawn').textContent = state.draws.length;
-    $('sTiles').textContent = (TOTAL - usedTiles().length).toLocaleString('en-IN');
-    $('sNums').textContent = numsLeft().toLocaleString('en-IN');
+    $('sSold').textContent = state.draws.length;
+    $('sLeft').textContent = onlineLeft();
+    $('sPrinted').textContent = MAX - TO;
     $('sEvents').textContent = state.log.length;
 
-    var issues = 0, t = {}, n = {}, p = {};
-    state.draws.forEach(function(d){ if (t[d.tile] || n[d.n] || p[d.phone]) issues++; t[d.tile] = n[d.n] = p[d.phone] = 1; });
-    var c = $('check');
-    c.className = 'check ' + (issues ? 'bad' : 'ok');
-    c.textContent = issues ? issues + ' problem(s) found.' : 'Integrity check passed: every tile was picked once, every number was given out once, and every phone picked once (' + state.draws.length + ' picks).';
+    var seen = {}, dup = 0, mism = 0, t = {}, p = {};
+    for (var c = MIN; c <= MAX; c++) { if (seen[state.numbers[c]]) dup++; seen[state.numbers[c]] = 1; }
+    state.draws.forEach(function(d){ if (t[d.tile] || p[d.phone]) dup++; if (state.numbers[d.tile] !== d.n) mism++; t[d.tile] = p[d.phone] = 1; });
+    var ok = !dup && !mism, ck = $('check');
+    ck.className = 'check ' + (ok ? 'ok' : 'bad');
+    ck.textContent = ok ? 'Integrity check passed: all ' + (MAX - MIN + 1) + ' cards have their own draw number, every online sale revealed its card\'s fixed number, and every card and phone was used once (' + state.draws.length + ' online sales).' : (dup + mism) + ' problem(s) found.';
 
     var d = $('draws'); d.textContent = '';
-    if (!state.draws.length) d.appendChild(el('div', 'empty', 'No picks yet. Switch to the customer view and pick a tile.'));
-    else d.appendChild(table(['#', 'Tile', 'Number', 'Name', 'Phone', 'Time'], state.draws.slice().reverse().map(function(r){
-      var tr = el('tr');
-      [[r.no, 'mono'], [r.tile, 'num'], [r.n, 'num'], [r.name], [r.phone, 'mono'], [time(r.t), 'mono']].forEach(function(x){ tr.appendChild(el('td', x[1], x[0])); });
-      return tr;
+    if (!state.draws.length) d.appendChild(el('div', 'empty', 'No online sales yet. Switch to the customer view and take a card.'));
+    else d.appendChild(table(['#', 'Card no.', 'Draw number', 'Name', 'Phone', 'Time'], state.draws.slice().reverse().map(function(r){
+      return row([[r.no, 'mono'], [r.tile, 'num'], [r.n, 'num'], [r.name], [r.phone, 'mono'], [time(r.t), 'mono']]);
     })));
 
+    var pr = $('print'); pr.textContent = '';
+    var rows = []; for (var c2 = TO + 1; c2 <= MAX; c2++) rows.push(row([[c2, 'num'], [state.numbers[c2], 'num'], ['', ''], ['', '']]));
+    pr.appendChild(table(['Card no. (print in box)', 'Scratch number (under panel)', 'Sold to', 'Phone'], rows));
+
     var l = $('log'); l.textContent = '';
-    l.appendChild(table(['Time', 'Event', 'Name', 'Phone', 'Tile', 'Number', 'Details'], state.log.slice().reverse().map(function(r){
-      var tr = el('tr'), pc = r.type === 'number_assigned' ? 'assigned' : /rejected/.test(r.type) ? 'bad' : /repeat/.test(r.type) ? 'warn' : '';
+    l.appendChild(table(['Time', 'Event', 'Name', 'Phone', 'Card', 'Draw number', 'Details'], state.log.slice().reverse().map(function(r){
+      var tr = el('tr'), pc = r.type === 'card_sold_online' ? 'assigned' : /rejected/.test(r.type) ? 'bad' : /repeat/.test(r.type) ? 'warn' : '';
       tr.appendChild(el('td', 'mono', time(r.t)));
       var tdp = el('td'); tdp.appendChild(el('span', 'pill ' + pc, r.type.replace(/_/g, ' '))); tr.appendChild(tdp);
       [r.name, r.phone, r.tile, r.n, r.d].forEach(function(v){ tr.appendChild(el('td', 'mono', String(v))); });
       return tr;
     })));
   }
+  $('lookup').addEventListener('submit', function(e){
+    e.preventDefault();
+    var num = parseInt($('lookupIn').value, 10), out = $('lookupOut'), card = null;
+    for (var c = MIN; c <= MAX; c++) if (state.numbers[c] === num) { card = c; break; }
+    if (card === null) { out.textContent = 'No card has draw number ' + ($('lookupIn').value || '') + '. Draw numbers run ' + MIN + '–' + MAX + '.'; return; }
+    if (card >= FROM && card <= TO) {
+      var sale = state.draws.filter(function(d){ return d.tile === card; })[0];
+      out.textContent = 'Draw number ' + num + ' is on online card ' + card + '. ' + (sale ? 'Bought by ' + sale.name + ', phone ' + sale.phone + ' (sale #' + sale.no + ').' : 'This online card has not been sold.');
+    } else {
+      out.textContent = 'Draw number ' + num + ' is on printed scratch card ' + card + '. The winner must show the physical card with card number ' + card + '.';
+    }
+    log('holder_lookup', { tile: card }, num, 'draw number ' + num); save();
+  });
   function show(which){
     $('vCustomer').setAttribute('aria-selected', which === 'c');
     $('vAdmin').setAttribute('aria-selected', which === 'a');
@@ -182,7 +220,7 @@ td.num{font-family:var(--display);font-weight:700;font-size:20px}
   }
   $('vCustomer').addEventListener('click', function(){ show('c'); });
   $('vAdmin').addEventListener('click', function(){ show('a'); });
-  $('reset').addEventListener('click', function(){ state = fresh(); log('demo_reset'); save(); app.resetMe(); app.refresh(); renderAdmin(); });
+  $('reset').addEventListener('click', function(){ state = fresh(state.numbers); log('demo_reset', {}, null, 'online sales cleared, card numbers kept'); save(); app.resetMe(); app.refresh(); renderAdmin(); });
 })();
 </script>
 </body>

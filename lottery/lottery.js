@@ -2,7 +2,7 @@
  * Coupon Number Draw — customer UI shared by index.html (live) and demo.html.
  *
  * Lottery.init({ mount, backend, storageKey }) where backend has:
- *   status()  -> {open, left, total, min, max, title, requireCode, usedTiles: [..]}
+ *   status()  -> {open, left, total, min, max, onlineFrom, onlineTo, title, drawInfo, requireCode, usedTiles: [..]}
  *   visit(device)
  *   draw({tile, name, phone, code, device}) ->
  *     {status:'assigned'|'existing', tile, number, drawNo, left?}
@@ -27,46 +27,48 @@
   }
 
   var TEMPLATE =
+    '<img class="hero" data-l="hero" hidden alt="" width="1536" height="816">' +
     '<header>' +
-      '<span class="eyebrow" data-l="range">Lottery · Numbers 100 – 1300</span>' +
-      '<h1 data-l="title">Coupon Number Draw</h1>' +
-      '<p class="muted">Pick any tile below. Behind it is a random number between <span data-l="min">100</span> and <span data-l="max">1300</span> that nobody has received yet. Each tile can be picked once, and each number can be won once.</p>' +
+      '<span class="eyebrow" data-l="range">Online cards 100 – 699</span>' +
+      '<h1 data-l="title">Prize Coupon Draw</h1>' +
+      '<p class="drawinfo" data-l="drawInfo" hidden></p>' +
+      '<p class="muted">Choose a card number below. Each card hides its own draw number, just like the scratch panel on a printed card. Tap a card, enter your details and it is revealed. Once a card is taken, nobody else can get it or its draw number.</p>' +
     '</header>' +
     '<section class="ticket" data-l="mine" hidden aria-live="polite">' +
-      '<span class="t-label">Your result</span>' +
+      '<span class="t-label">Your coupon</span>' +
       '<div class="pair">' +
-        '<div><span class="cap">Tile</span><span class="tileno" data-l="myTile"></span></div>' +
+        '<div><span class="cap">Card no.</span><span class="tileno" data-l="myTile"></span></div>' +
         '<span class="arrow" aria-hidden="true">→</span>' +
-        '<div><span class="cap">Your number</span><span class="number won" data-l="myNum"></span></div>' +
+        '<div><span class="cap">Your draw number</span><span class="number won" data-l="myNum"></span></div>' +
       '</div>' +
       '<div class="t-foot"><span data-l="myDraw"></span><span>Take a screenshot to keep it</span></div>' +
     '</section>' +
     '<div class="err" data-l="err" hidden></div>' +
     '<div class="toolbar">' +
-      '<span class="count" data-l="left">Loading tiles…</span>' +
+      '<span class="count" data-l="left">Loading cards…</span>' +
       '<form class="find" data-l="find" novalidate>' +
-        '<label class="sr" for="lFindInput">Find a tile</label>' +
-        '<input id="lFindInput" data-l="findIn" type="number" inputmode="numeric" placeholder="Find tile">' +
+        '<label class="sr" for="lFindInput">Find a card</label>' +
+        '<input id="lFindInput" data-l="findIn" type="number" inputmode="numeric" placeholder="Find card">' +
         '<button class="btn-plain" type="submit">Go</button>' +
       '</form>' +
     '</div>' +
-    '<div class="grid" data-l="grid" role="group" aria-label="Tiles"></div>' +
+    '<div class="grid" data-l="grid" role="group" aria-label="Card numbers"></div>' +
     '<div class="overlay" data-l="sheet" hidden>' +
       '<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="lSheetTitle">' +
-        '<div class="sheet-head"><h2 id="lSheetTitle" data-l="sheetTitle">Tile</h2>' +
+        '<div class="sheet-head"><h2 id="lSheetTitle" data-l="sheetTitle">Card</h2>' +
           '<button class="x" type="button" data-l="close" aria-label="Close">×</button></div>' +
         '<div class="ticket" aria-live="polite">' +
-          '<span class="t-label">Number behind this tile</span>' +
+          '<span class="t-label">Draw number on this card</span>' +
           '<div class="number idle" data-l="num">?</div>' +
         '</div>' +
         '<form data-l="form" novalidate>' +
           '<label for="lName">Your name<input id="lName" data-l="name" autocomplete="name" maxlength="80"></label>' +
-          '<label for="lPhone">Phone number <span class="hint">Each phone number gets one pick</span>' +
+          '<label for="lPhone">Phone number <span class="hint">Each phone number gets one card</span>' +
             '<input id="lPhone" data-l="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20"></label>' +
           '<label for="lCode" data-l="codeRow" hidden>Coupon code <span class="hint">Printed on your coupon, e.g. ABCD-2345</span>' +
             '<input id="lCode" data-l="code" autocapitalize="characters" autocomplete="off" maxlength="20"></label>' +
           '<div class="err" data-l="sheetErr" hidden></div>' +
-          '<button class="btn" type="submit" data-l="go">Open tile</button>' +
+          '<button class="btn" type="submit" data-l="go">Reveal my number</button>' +
         '</form>' +
         '<div class="done" data-l="done" hidden>' +
           '<p><strong data-l="doneMsg"></strong></p>' +
@@ -80,8 +82,9 @@
     root.innerHTML = TEMPLATE;
     var $ = {};
     Array.prototype.forEach.call(root.querySelectorAll('[data-l]'), function (el) { $[el.getAttribute('data-l')] = el; });
+    if (opts.banner && opts.banner.src) { $.hero.src = opts.banner.src; $.hero.alt = opts.banner.alt || ''; $.hero.hidden = false; }
 
-    var MIN = 100, MAX = 1300, TOTAL = 1201, requireCode = false, isOpen = true, numbersLeft = null;
+    var MIN = 100, MAX = 1300, FROM = 100, TO = 699, TOTAL = 600, requireCode = false, isOpen = true, numbersLeft = null;
     var used = {}, tiles = {}, current = null, busy = false, loaded = false;
     var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     var me = load();
@@ -100,28 +103,28 @@
       $.grid.textContent = '';
       tiles = {};
       var frag = document.createDocumentFragment();
-      for (var v = MIN; v <= MAX; v++) {
+      for (var v = FROM; v <= TO; v++) {
         var b = document.createElement('button');
         b.type = 'button'; b.className = 'tile'; b.textContent = v; b.setAttribute('data-v', v);
-        b.setAttribute('aria-label', 'Tile ' + v);
+        b.setAttribute('aria-label', 'Card ' + v);
         tiles[v] = b; frag.appendChild(b);
       }
       $.grid.appendChild(frag);
     }
     function paint() {
       var usedCount = 0;
-      for (var v = MIN; v <= MAX; v++) {
+      for (var v = FROM; v <= TO; v++) {
         var b = tiles[v], isUsed = !!used[v], mine = !!(me && me.tile === v);
         if (isUsed) usedCount++;
         b.disabled = isUsed || mine;
         b.classList.toggle('mine', mine);
-        b.setAttribute('aria-label', 'Tile ' + v + (mine ? ', your pick' : isUsed ? ', already picked' : ''));
+        b.setAttribute('aria-label', 'Card ' + v + (mine ? ', your card' : isUsed ? ', taken' : ''));
       }
       $.grid.classList.toggle('locked', !!me || !isOpen);
       if (loaded) {
         var tilesLeft = TOTAL - usedCount;
         $.left.innerHTML = '';
-        $.left.appendChild(document.createTextNode(fmt(tilesLeft) + ' of ' + fmt(TOTAL) + ' tiles left'));
+        $.left.appendChild(document.createTextNode(fmt(tilesLeft) + ' of ' + fmt(TOTAL) + ' online cards left'));
         var s = document.createElement('small'); s.textContent = 'updates live'; $.left.appendChild(s);
       }
       renderMine();
@@ -131,26 +134,28 @@
       $.mine.hidden = false;
       $.myTile.textContent = me.tile;
       $.myNum.textContent = me.number;
-      $.myDraw.textContent = 'Draw #' + me.drawNo;
+      $.myDraw.textContent = 'Online sale #' + me.drawNo;
     }
 
     function applyStatus(s) {
-      MIN = s.min; MAX = s.max; TOTAL = s.total; requireCode = !!s.requireCode; isOpen = !!s.open; numbersLeft = s.left;
-      $.range.textContent = 'Lottery · Numbers ' + MIN + ' – ' + MAX;
-      $.min.textContent = MIN; $.max.textContent = MAX;
+      var rangeChanged = s.onlineFrom !== FROM || s.onlineTo !== TO;
+      MIN = s.min; MAX = s.max; FROM = s.onlineFrom; TO = s.onlineTo; TOTAL = s.total;
+      requireCode = !!s.requireCode; isOpen = !!s.open; numbersLeft = s.left;
+      $.range.textContent = 'Online cards ' + FROM + '–' + TO + ' · Printed cards ' + (TO + 1) + '–' + MAX;
       if (s.title) { $.title.textContent = s.title; document.title = s.title; }
+      show($.drawInfo, s.drawInfo || '');
       $.codeRow.hidden = !requireCode;
-      if (!loaded || !tiles[MIN] || !tiles[MAX]) buildGrid();
+      if (!loaded || rangeChanged) buildGrid();
       used = {};
       (s.usedTiles || []).forEach(function (v) { used[v] = true; });
       loaded = true;
       paint();
       if (me) show($.err, '');
-      else if (!isOpen) show($.err, 'The draw is closed right now.');
-      else if (numbersLeft === 0) show($.err, 'Every number has been given out. The draw is complete.');
+      else if (!isOpen) show($.err, 'Online sales are closed right now.');
+      else if (numbersLeft === 0) show($.err, 'All online cards have been taken.');
       else show($.err, '');
       if (current && used[current] && !busy && $.done.hidden) {
-        show($.sheetErr, 'Someone just picked tile ' + current + '. Please close this and choose another tile.');
+        show($.sheetErr, 'Someone just took card ' + current + '. Please close this and choose another card.');
         $.go.disabled = true;
       }
     }
@@ -163,12 +168,12 @@
 
     // ---------- pick sheet
     function openSheet(v) {
-      if (me) { show($.err, 'You already picked tile ' + me.tile + '. Each person gets one pick.'); $.err.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' }); return; }
+      if (me) { show($.err, 'You already have card ' + me.tile + '. Each person gets one card.'); $.err.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' }); return; }
       if (!isOpen || used[v]) return;
       current = v;
-      $.sheetTitle.textContent = 'Tile ' + v;
+      $.sheetTitle.textContent = 'Card ' + v;
       $.num.textContent = '?'; $.num.className = 'number idle';
-      $.go.textContent = 'Open tile ' + v; $.go.disabled = false;
+      $.go.textContent = 'Reveal my number'; $.go.disabled = false;
       show($.sheetErr, ''); $.form.hidden = false; $.done.hidden = true;
       $.sheet.hidden = false;
       document.body.style.overflow = 'hidden';
@@ -200,7 +205,7 @@
       }
       function finish() {
         busy = false; $.close.disabled = false;
-        $.go.textContent = 'Open tile ' + tile;
+        $.go.textContent = 'Reveal my number';
         if (result.status === 'assigned' || result.status === 'existing') {
           me = { tile: result.tile, number: result.number, drawNo: result.drawNo };
           save();
@@ -208,11 +213,11 @@
           n.textContent = result.number; n.className = 'number won';
           $.form.hidden = true; $.done.hidden = false;
           if (result.status === 'assigned') {
-            $.sheetTitle.textContent = 'Tile ' + result.tile;
-            $.doneMsg.textContent = 'Your number is ' + result.number + '. Tile ' + result.tile + ' and number ' + result.number + ' are now taken, so nobody else can get them.';
+            $.sheetTitle.textContent = 'Card ' + result.tile;
+            $.doneMsg.textContent = 'Your draw number is ' + result.number + '. Card ' + result.tile + ' is now yours, so nobody else can get it or this number.';
           } else {
-            $.sheetTitle.textContent = 'You already picked';
-            $.doneMsg.textContent = 'This phone number already picked tile ' + result.tile + ' and got number ' + result.number + '. Each person gets one pick.';
+            $.sheetTitle.textContent = 'You already have a card';
+            $.doneMsg.textContent = 'This phone number already has card ' + result.tile + ' with draw number ' + result.number + '. Each person gets one card.';
           }
           paint();
           $.doneBtn.focus();
